@@ -2,7 +2,7 @@ from loader import *
 from functions import *
 player1=Player((WIDTH//10,HEIGHT//2),3,0,True,[pygame.K_a,pygame.K_d,pygame.K_w,pygame.K_s],"z")
 player2=Player((50,HEIGHT//2),3,0,True,[pygame.K_LEFT,pygame.K_RIGHT,pygame.K_UP,pygame.K_DOWN],"b")
-lpatforms=[Platform((0,HEIGHT//2+1),WIDTH//7,HEIGHT//2),Platform(((WIDTH//7)*6,HEIGHT//2),WIDTH-(WIDTH//7)*6,HEIGHT//2)]
+lpatforms=[Platform((0,HEIGHT//2+1),WIDTH//7,HEIGHT//6),Platform(((WIDTH//7)*6,HEIGHT//2),WIDTH-(WIDTH//7)*6,HEIGHT//6)]
 clickedN=False
 roundof=0
 to_play=False
@@ -26,7 +26,7 @@ for i in range(0,101):
     scoreuptohundred.append([scorefont.render(f"Green player Score: {i/2}",True,(255,255,255)),scorefont.render(f"Blue player Score: {i/2}",True,(255,255,255))])
 for i in range(0,201):
     roundsuptohundred.append(roundfont.render(f"Round: {i}",True,(255,255,255)))
-listofclasses=[damage,gun,prozor,lbolts]
+listofclasses=[damage,gun,prozor,lbolts,Startend]
 while True:
     listofclasses[2]=prozor
     listofclasses[3]=lbolts
@@ -122,7 +122,7 @@ while True:
         player1.building=None
         player2.building=None
         lbolts=[]
-        listofclasses=[damage,gun,prozor,lbolts]
+        listofclasses=[damage,gun,prozor,lbolts,Startend]
     if prozor=="taking":
         for i in range(len(lpatforms)):
             listofclasses=lpatforms[i].draw(window,listofclasses,textures)
@@ -213,7 +213,7 @@ while True:
             to_play=True
             p1score=0
             p3score=0
-            lpatforms=[Platform((0,HEIGHT//2+1),WIDTH//7,HEIGHT//2),Platform(((WIDTH//7)*6,HEIGHT//2),WIDTH//7,HEIGHT//2)]
+            lpatforms=[Startend((0,HEIGHT//2+1),WIDTH//7,HEIGHT//9),Startend(((WIDTH//7)*6,HEIGHT//2),WIDTH//7,HEIGHT//9)]
             pygame.mouse.set_visible(False)
     pygame.display.update()
     clock.tick(fps)

@@ -1,6 +1,7 @@
 from General_info import *
 lbolts=[]
 prozor="menu"
+listofclasses=[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
 class Bolt:
     def __init__(s,dx,dy,y,x,dirrec,textures,id):
         s.dx=dx
@@ -26,10 +27,12 @@ class Platform:
         s.x,s.y=pos
         s.width=width
         s.height=height
-        yalllow=5
+        s.yalllow=5
     def draw(s,window,damage,textures):
         if type(s)==damage[0]:
             window.blit(textures["barbedwire"],(s.x,s.y))
+        elif type(s)==damage[4]:
+            window.blit(textures["startplat"],(s.x,s.y))
         elif type(s)==damage[1]:
             window.blit(textures[f"crossbow{s.dir}"],(s.x,s.y))
             if damage[2]=="game":
@@ -53,7 +56,7 @@ class Platform:
             pygame.draw.rect(window,(255,255,100),pygame.Rect(s.x,s.y,s.width,s.height))
         return damage
     def ifplayerontop(s,px,py,pwidth,pheight):
-        if ((s.x<=px<=s.x+s.width) or (s.x<=px+pwidth<=s.x+s.width) or (px<=s.x<=px+pwidth)) and py+pheight<=s.y:
+        if ((s.x<=px<=s.x+s.width) or (s.x<=px+pwidth<=s.x+s.width) or (px<=s.x<=px+pwidth)) and py+pheight<=s.y+s.yalllow:
                 return [True,s.y,s.x,s.width,s.height,s]
         return [False,-1,-1,-1]
     def ifplayerbelow(s,px,py,pwidth,pheight):

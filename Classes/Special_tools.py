@@ -39,7 +39,9 @@ class Button:
     def draw(s,window,textures):
         window.blit(textures[s.picname],(s.x,s.y))
 startbutton=Button(WIDTH//2,HEIGHT//2,WIDTH//(1920//200),HEIGHT//(1080//75),"startbutton")
-
+class Startend(Platform):
+    def __init__(s,pos,width,height):
+        super().__init__(pos,width,height)
 class Offerer:
     def __init__(s, offfers,height):
         s.offers=offfers

@@ -30,6 +30,8 @@ class Player:
         s.color=color
         s.lastpic=None
         s.score=0
+        s.yrazdeljak=100
+        s.xrazdeljak=100
     def operate_cursor(s,window,keys,txt):
         s.move_cursor(keys)
         s.draw_cursor(window,txt)
@@ -209,11 +211,28 @@ class Player:
     
         
         
-        
-        s.x+=s.dx
+        s.smalldx=s.dx/100
+        for i in range(s.xrazdeljak):
+            s.x+=s.smalldx
+            save=copy.deepcopy(s.x)
+            for i in range(len(lplatforms)):
+                if pygame.Rect(s.x-s.w//2,s.y-s.h//2,s.w,s.h).colliderect(pygame.Rect(lplatforms[i].x,lplatforms[i].y,lplatforms[i].width,lplatforms[i].height)):
+                    s.x-=s.smalldx
+                    break
+            if s.x!=save:
+                break
         if not s.onground:
             s.dy+=s.ddy
-        s.y+=s.dy
+        s.smalldy=s.dy/s.yrazdeljak
+        for i in range(s.yrazdeljak):
+            s.y+=s.smalldy
+            save=copy.deepcopy(s.y)
+            for i in range(len(lplatforms)):
+                if pygame.Rect(s.x-s.w//2,s.y-s.h//2,s.w,s.h).colliderect(pygame.Rect(lplatforms[i].x,lplatforms[i].y,lplatforms[i].width,lplatforms[i].height)):
+                    s.y-=s.smalldy
+                    break
+            if s.y!=save:
+                break
         s.y=max(ylimitu,s.y-s.h//2)+s.h//2
         s.y=min(ylimitd,s.y+s.h//2)-s.h//2
         s.x=min(xlimitl,s.x+s.w//2)-s.w//2
@@ -244,10 +263,6 @@ class Player:
                         s.untill=180
                     
         s.previousx=s.x
-        for i in range(len(lplatforms)):
-            if pygame.Rect(lplatforms[i].x,lplatforms[i].y+1,lplatforms[i].width,lplatforms[i].height).colliderect(s.x-s.w//2,s.y-s.h//2,s.w,s.h) and not s.onground:
-                s.y=lplatforms[i].y-1-s.h//2
-                pass
         if s.y-s.h-1>=HEIGHT and s.untill==-1:
             s.health-=1
             s.untill=180
@@ -259,6 +274,9 @@ class Player:
             s.x,s.y=s.stpos
         if s.stpos==None:
             s.stpos=(s.x,s.y)
+        if wining:
+            s.dx=0
+            s.dy=0
         if pamti[0]!=0:
             return s.y+s.h//2+1==pamti[0][1][1],wining
         return False,wining
