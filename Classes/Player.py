@@ -128,7 +128,7 @@ class Player:
         if pamti[1]!=0:
             ylimitu=pamti[1][1][1]+1
         if pamti[2]!=0:
-            xlimitl=pamti[2][1][2]-1
+            xlimitl=pamti[2][1][2]-2
         if pamti[3]!=0:
             xlimitr=pamti[3][1][2]+1
         if pamti[0]!=0:
@@ -175,7 +175,7 @@ class Player:
                 s.onground=False
         if not s.onground:
             if pamti[2]!=0:
-                if pamti[2][1][2]-1-s.w//2==s.x:
+                if pamti[2][1][2]-2-s.w//2==s.x:
                     s.offgrounddx=0
             if pamti[3]!=0:
                 if pamti[3][1][2]+1+s.w//2==s.x:
@@ -189,7 +189,7 @@ class Player:
                         s.untill=180
 
             if pamti[2]!=0:
-                if pamti[2][1][2]-1-s.w//2==s.x:
+                if pamti[2][1][2]-2-s.w//2==s.x:
                     if type(pamti[2][1][5])==damage:
                         s.health-=1
                         s.untill=180
@@ -201,7 +201,7 @@ class Player:
                         s.untill=180
 
             if pamti[1]:
-                if pamti[1][1][1]+s.h//2==s.y:
+                if pamti[1][1][1]+s.h//2+1==s.y:
                     if type(pamti[1][1][5])==damage:
                         s.health-=1
                         s.untill=180
@@ -218,6 +218,31 @@ class Player:
         s.y=min(ylimitd,s.y+s.h//2)-s.h//2
         s.x=min(xlimitl,s.x+s.w//2)-s.w//2
         s.x=max(xlimitr,s.x-s.w//2)+s.w//2
+        if s.untill==-1:
+            if pamti[0]!=0:
+                if pamti[0][1][1]-1-s.h//2==s.y:
+                    if type(pamti[0][1][5])==damage:
+                        s.health-=1
+                        s.untill=180
+
+            if pamti[2]!=0:
+                if pamti[2][1][2]-2-s.w//2==s.x:
+                    if type(pamti[2][1][5])==damage:
+                        s.health-=1
+                        s.untill=180
+
+            if pamti[3]!=0:
+                if pamti[3][1][2]+1+s.w//2==s.x:
+                    if type(pamti[3][1][5])==damage:
+                        s.health-=1
+                        s.untill=180
+
+            if pamti[1]:
+                if pamti[1][1][1]+s.h//2+1==s.y:
+                    if type(pamti[1][1][5])==damage:
+                        s.health-=1
+                        s.untill=180
+                    
         s.previousx=s.x
         for i in range(len(lplatforms)):
             if pygame.Rect(lplatforms[i].x,lplatforms[i].y+1,lplatforms[i].width,lplatforms[i].height).colliderect(s.x-s.w//2,s.y-s.h//2,s.w,s.h) and not s.onground:

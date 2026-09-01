@@ -13,14 +13,14 @@ class Special(Platform):
         first=False
         second=False
         for i in range(len(s.listofplats2)):
-            s.listofplats2[i].draw(window,lsitofclasses,textures)
+            lsitofclasses=s.listofplats2[i].draw(window,lsitofclasses,textures)
             a=s.listofplats2[i].colidewithclicked(poses[0],mouse1)
             a1=s.listofplats2[i].colidewithclicked(poses[1],mouse2)
             if a:
                 first=True
             elif a1:
                 second=True
-        return [[first,s],[second,s]]
+        return [[first,s],[second,s]],lsitofclasses
 class Button:
     def __init__(s, x,y,w,h,picname):
         s.x=x
@@ -63,7 +63,7 @@ class Offerer:
         taken=[False,False,False,False]
         count=0
         for i in range(len(s.offers)):
-            l=s.offers[count].draws_cols(window,poses,mouse1,mouse2,textures,listofclasses)
+            l,listofclasses=s.offers[count].draws_cols(window,poses,mouse1,mouse2,textures,listofclasses)
             if l[0][0] or l[1][0]:
                 del s.offers[count]
                 count-=1
@@ -74,7 +74,7 @@ class Offerer:
             if l[1][0]:
                 taken[1]=True
                 taken[3]=l[1][1]
-        return taken
+        return taken,listofclasses
 class Background:
     def drawbg(s,window,prozor,textures):
         if prozor=="menu":

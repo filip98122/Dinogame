@@ -47,10 +47,11 @@ class Platform:
                     if s.dir=="r":
                         dy=0
                     s.time=100
-                    lbolts.append(Bolt(dx,dy,s.y+s.height//2,s.x+s.width//2,s.dir,textures,s.id))
+                    damage[3].append(Bolt(dx,dy,s.y+s.height//2,s.x+s.width//2,s.dir,textures,s.id))
             #pygame.draw.rect(window,(0,0,255),pygame.Rect(s.x,s.y,s.width,s.height))
         else:
             pygame.draw.rect(window,(255,255,100),pygame.Rect(s.x,s.y,s.width,s.height))
+        return damage
     def ifplayerontop(s,px,py,pwidth,pheight):
         if ((s.x<=px<=s.x+s.width) or (s.x<=px+pwidth<=s.x+s.width) or (px<=s.x<=px+pwidth)) and py+pheight<=s.y:
                 return [True,s.y,s.x,s.width,s.height,s]
@@ -72,10 +73,10 @@ class Platform:
             return True
         return False
     def ifplayeronleftsidefor(s,px,py,pwidth,pheight):
-        if ((s.y<py<s.y+s.height) or (s.y<py+pheight<s.y+s.height) or (py<s.y<py+pheight)) and px+pwidth<s.x:
+        if ((s.y<py<s.y+s.height) or (s.y<py+pheight<s.y+s.height) or (py<s.y<py+pheight)) and px+pwidth<=s.x:
             return [True,s.y,s.x,s.width,s.height,s]
         return [False,-1,-1,-1]
     def ifplayeronrightsidefor(s,px,py,pwidth,pheight):
-        if ((s.y<py<s.y+s.height) or (s.y<py+pheight<s.y+s.height) or (py<s.y<py+pheight)) and px>s.x+s.width:
+        if ((s.y<py<s.y+s.height) or (s.y<py+pheight<s.y+s.height) or (py<s.y<py+pheight)) and px>=s.x+s.width:
             return [True,s.y,s.x+s.width,s.width,s.height,s]
         return [False,-1,-1,-1]
