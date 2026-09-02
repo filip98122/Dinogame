@@ -24,5 +24,7 @@ def load():
     textures["crossbowd"]=pygame.transform.rotate(textures["crossbowr"],-90)
     textures["crossbowl"]=pygame.transform.rotate(textures["crossbowd"],-90)
     textures["startplat"]=pygame.transform.scale(pygame.image.load("textures/platform.png"),(WIDTH//7,HEIGHT//9))
+    textures["frame"]=pygame.transform.scale(pygame.image.load("textures/frame.png"),(WIDTH//(1707/135),HEIGHT//(1067/135)))
+    textures["bomb"]=pygame.transform.scale(pygame.image.load("textures/bomb.png"),(WIDTH//(1707/45),HEIGHT//(1067/55)))
     return textures
 textures=load()

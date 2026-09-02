@@ -100,3 +100,11 @@ class gun(Special):
         s.pubid+=1
         s.width=textures[f"crossbow{s.dir}"].get_width()
         s.height=textures[f"crossbow{s.dir}"].get_height()
+class bomb(Special):
+    def __init__(s, pos, width, height, specialfunc, listofplatforms, lockedfor,textures):
+        super().__init__(pos, width, height, specialfunc, listofplatforms, lockedfor)
+        s.radiusx=textures["frame"].get_width()
+        s.radiusy=textures["frame"].get_height()
+    def do_special(s, args):
+        args[0].blit(args[1]["frame"],(s.x-s.radiusx//2+s.width//2,s.y-s.radiusy//2+s.height//2))
+        return []

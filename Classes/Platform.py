@@ -33,6 +33,8 @@ class Platform:
             window.blit(textures["barbedwire"],(s.x,s.y))
         elif type(s)==damage[4]:
             window.blit(textures["startplat"],(s.x,s.y))
+        elif type(s)==damage[5]:
+            window.blit(textures["bomb"],(s.x,s.y))
         elif type(s)==damage[1]:
             window.blit(textures[f"crossbow{s.dir}"],(s.x,s.y))
             if damage[2]=="game":

@@ -26,7 +26,7 @@ for i in range(0,101):
     scoreuptohundred.append([scorefont.render(f"Green player Score: {i/2}",True,(255,255,255)),scorefont.render(f"Blue player Score: {i/2}",True,(255,255,255))])
 for i in range(0,201):
     roundsuptohundred.append(roundfont.render(f"Round: {i}",True,(255,255,255)))
-listofclasses=[damage,gun,prozor,lbolts,Startend]
+listofclasses=[damage,gun,prozor,lbolts,Startend,bomb]
 while True:
     listofclasses[2]=prozor
     listofclasses[3]=lbolts
@@ -99,7 +99,9 @@ while True:
         player2=Player((50,HEIGHT//2),3,0,True,[pygame.K_LEFT,pygame.K_RIGHT,pygame.K_UP,pygame.K_DOWN],"b")
         fordraw=player1.move(keys,lpatforms,player2,True,change)
         fordraw1=player2.move(keys,lpatforms,player1,True,change)
-        offerer=Offerer([Special((0,0),100,20,empty,[Platform((0,0),20,100)],[[0,0],[100,-100]]),Special((0,0),250,20,empty,[],[[0,0]]),Special((0,0),100,20,empty,[],[[0,0]]),gun((0,0),80,60,empty,[],[[0,0]],100,"l",textures),damage((0,0),45,45,empty,[],[[0,0]])],225)
+        
+        offerer=Offerer([Special((0,0),100,20,empty,[Platform((0,0),20,100)],[[0,0],[100,-100]]),Special((0,0),250,20,empty,[],[[0,0]]),bomb((0,0),45,55,empty,[],[[0,0]],textures),gun((0,0),80,60,empty,[],[[0,0]],100,"l",textures),damage((0,0),45,45,empty,[],[[0,0]])],225)
+        
         for i in range(len(lpatforms)):
             listofclasses=lpatforms[i].draw(window,listofclasses,textures)
             lbolts=listofclasses[3]
@@ -122,7 +124,7 @@ while True:
         player1.building=None
         player2.building=None
         lbolts=[]
-        listofclasses=[damage,gun,prozor,lbolts,Startend]
+        listofclasses=[damage,gun,prozor,lbolts,Startend,bomb]
     if prozor=="taking":
         for i in range(len(lpatforms)):
             listofclasses=lpatforms[i].draw(window,listofclasses,textures)
@@ -140,6 +142,8 @@ while True:
         if p1took and not p1placed:
             player1.move_cursor(keys)
             player1.curse_u_r=(int(player1.curse_u_r[0]),int(player1.curse_u_r[1]))
+            if type(player1.building)==bomb:
+                a=player1.building.do_special([window,textures])
             for i in range(len(player1.building.listofplats2)):
                 listofclasses=player1.building.listofplats2[i].draw(window,listofclasses,textures)
                 lbolts=listofclasses[3]
@@ -148,6 +152,8 @@ while True:
         if p2took and not p2placed:
             player2.move_cursor(keys)
             player2.curse_u_r=(int(player2.curse_u_r[0]),int(player2.curse_u_r[1]))
+            if type(player2.building)==bomb:
+                a=player2.building.do_special([window,textures])
             for i in range(len(player2.building.listofplats2)):
                 listofclasses=player2.building.listofplats2[i].draw(window,listofclasses,textures)
                 lbolts=listofclasses[3]
@@ -212,7 +218,7 @@ while True:
         if startbutton.clickedon(mousePos,mouseState):
             to_play=True
             p1score=0
-            p3score=0
+            p2score=0
             lpatforms=[Startend((0,HEIGHT//2+1),WIDTH//7,HEIGHT//9),Startend(((WIDTH//7)*6,HEIGHT//2),WIDTH//7,HEIGHT//9)]
             pygame.mouse.set_visible(False)
     pygame.display.update()
