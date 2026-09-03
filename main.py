@@ -27,6 +27,7 @@ for i in range(0,101):
 for i in range(0,201):
     roundsuptohundred.append(roundfont.render(f"Round: {i}",True,(255,255,255)))
 listofclasses=[damage,gun,prozor,lbolts,Startend,bomb]
+lbombs=[]
 while True:
     listofclasses[2]=prozor
     listofclasses[3]=lbolts
@@ -174,33 +175,64 @@ while True:
         if keys[pygame.K_PAGEDOWN] and p2placed==False and p2took:
             can=True
             p2placed=True
-            lpatforms.append(Platform((0,100),WIDTH//7,HEIGHT))
-            lpatforms.append(Platform((WIDTH//7*6,100),WIDTH//7,HEIGHT))
+            if type(player2.building)!=bomb:
+                lpatforms.append(Platform((0,100),WIDTH//7,HEIGHT))
+                lpatforms.append(Platform((WIDTH//7*6,100),WIDTH//7,HEIGHT))
             for i in range(len(lpatforms)):
                 for j in range(len(player2.building.listofplats2)):
                     if pygame.Rect(player2.building.listofplats2[j].x,player2.building.listofplats2[j].y,player2.building.listofplats2[j].width,player2.building.listofplats2[j].height).colliderect(pygame.Rect(lpatforms[i].x,lpatforms[i].y,lpatforms[i].width,lpatforms[i].height)):
                         can=False
-            del lpatforms[-1]
-            del lpatforms[-1]
+            if type(player2.building)!=bomb:
+                del lpatforms[-1]
+                del lpatforms[-1]
+            if type(player2.building)==bomb:
+                can=True
             if can:
                 lpatforms.extend(player2.building.listofplats2)
             else:
-                p2placed=False
+                p1placed=False
+            if type(player2.building)==bomb and can:
+                lbombs.append(Placedbomb(player2.building.x+player2.building.width//2,
+                                         player2.building.y+player2.building.height//2))
+                countj=0
+                for j in range((len(lpatforms))):
+                    if pygame.Rect(player2.building.x-WIDTH//(1707/135)//2+player2.building.width//2,player2.building.y-HEIGHT//(1067/135)//2+player2.building.height//2,WIDTH//(1707/135),HEIGHT//(1067/135)).colliderect(pygame.Rect(lpatforms[countj].x,lpatforms[countj].y,lpatforms[countj].width,lpatforms[countj].height)):
+                        if type(lpatforms[countj])!=Startend:
+                            del lpatforms[countj]
+                            countj-=1
+                    countj+=1
+
         if keys[pygame.K_e] and not p1placed and p1took:
             can=True
             p1placed=True
-            lpatforms.append(Platform((0,100),WIDTH//7,HEIGHT))
-            lpatforms.append(Platform((WIDTH//7*6,100),WIDTH//7,HEIGHT))
+            if type(player1.building)!=bomb:
+                lpatforms.append(Platform((0,100),WIDTH//7,HEIGHT))
+                lpatforms.append(Platform((WIDTH//7*6,100),WIDTH//7,HEIGHT))
             for i in range(len(lpatforms)):
                 for j in range(len(player1.building.listofplats2)):
                     if pygame.Rect(player1.building.listofplats2[j].x,player1.building.listofplats2[j].y,player1.building.listofplats2[j].width,player1.building.listofplats2[j].height).colliderect(pygame.Rect(lpatforms[i].x,lpatforms[i].y,lpatforms[i].width,lpatforms[i].height)):
                         can=False
-            del lpatforms[-1]
-            del lpatforms[-1]
+            
+            if type(player1.building)!=bomb:
+                del lpatforms[-1]
+                del lpatforms[-1]
+            if type(player1.building)==bomb:
+                can=True
             if can:
                 lpatforms.extend(player1.building.listofplats2)
             else:
                 p1placed=False
+            if type(player1.building)==bomb and can:
+                lbombs.append(Placedbomb(player1.building.x+player1.building.width//2,
+                                         player1.building.y+player1.building.height//2))
+                countj=0
+                for j in range((len(lpatforms))):
+                    if pygame.Rect(player1.building.x-WIDTH//(1707/135)//2,player1.building.y-HEIGHT//(1067/135)//2,WIDTH//(1707/135),HEIGHT//(1067/135)).colliderect(pygame.Rect(lpatforms[countj].x,lpatforms[countj].y,lpatforms[countj].width,lpatforms[countj].height)):
+                        if type(lpatforms[countj])!=Startend:
+                            del lpatforms[countj]
+                            countj-=1
+                    countj+=1
+
         if p1placed and p2placed and countdown!=0:
             countdown=1
         if keys[pygame.K_e] and not p1took:
@@ -221,5 +253,12 @@ while True:
             p2score=0
             lpatforms=[Startend((0,HEIGHT//2+1),WIDTH//7,HEIGHT//9),Startend(((WIDTH//7)*6,HEIGHT//2),WIDTH//7,HEIGHT//9)]
             pygame.mouse.set_visible(False)
+    countbombs=0
+    for i in range(len(lbombs)):
+        lbombs[countbombs].draw(window,textures)
+        if lbombs[countbombs].alive==False:
+            del lbombs[countbombs]
+            continue
+        countbombs+=1
     pygame.display.update()
     clock.tick(fps)

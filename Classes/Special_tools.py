@@ -108,3 +108,16 @@ class bomb(Special):
     def do_special(s, args):
         args[0].blit(args[1]["frame"],(s.x-s.radiusx//2+s.width//2,s.y-s.radiusy//2+s.height//2))
         return []
+class Placedbomb:
+    def __init__(s,x,y):
+        s.x=x
+        s.y=y
+        s.time=0
+        s.endtime=35
+        s.alive=True
+    def draw(s,window,textures):
+        pic=textures[f"explosion{s.time//(s.endtime//7)}"]
+        window.blit(pic,(s.x-pic.get_width()//2,s.y-pic.get_height()//2))
+        s.time+=1
+        if s.time==s.endtime:
+            s.alive=False

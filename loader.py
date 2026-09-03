@@ -1,6 +1,7 @@
 from General_info import *
 listofpics=[["walk",5],["idle",1]]
 color="zb"
+listofexplosions=[[12,11],[30,29],[51,47],[59,51],[57,51],[55,50],[53,49]]
 def load():
     textures={}
     for j in range(len(listofpics)):
@@ -26,5 +27,9 @@ def load():
     textures["startplat"]=pygame.transform.scale(pygame.image.load("textures/platform.png"),(WIDTH//7,HEIGHT//9))
     textures["frame"]=pygame.transform.scale(pygame.image.load("textures/frame.png"),(WIDTH//(1707/135),HEIGHT//(1067/135)))
     textures["bomb"]=pygame.transform.scale(pygame.image.load("textures/bomb.png"),(WIDTH//(1707/45),HEIGHT//(1067/55)))
+    scalex=WIDTH//(1707/135)/listofexplosions[3][0]
+    scaley=HEIGHT//(1067/135)/listofexplosions[3][1]
+    for i in range(len(listofexplosions)):
+        textures[f"explosion{i}"]=pygame.transform.scale(pygame.image.load(f"textures/explosion{i}.png"),(int(listofexplosions[i][0]*scalex),int(listofexplosions[i][1]*scaley)))
     return textures
 textures=load()
