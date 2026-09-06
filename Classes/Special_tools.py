@@ -96,8 +96,8 @@ class gun(Special):
         super().__init__(pos,width,height,specialfunc,listofplatforms,lockedfor)
         s.time=time
         s.dir=direction
-        s.id=s.pubid
-        s.pubid+=1
+        gun.pubid+=1
+        s.pubid=gun.pubid
         s.width=textures[f"crossbow{s.dir}"].get_width()
         s.height=textures[f"crossbow{s.dir}"].get_height()
 class bomb(Special):

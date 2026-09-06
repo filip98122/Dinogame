@@ -20,12 +20,16 @@ did=False
 presetsof=[]
 did2=False
 change=0
+seconds=[]
 scorefont=pygame.font.Font("textures/Verve.ttf",55)
 scoreuptohundred=[]
-for i in range(0,101):
+listofplatformsrandomselect=[Special((0,0),100,20,empty,[Platform((0,0),20,100)],[[0,0],[100,-100]]),Special((0,0),250,20,empty,[],[[0,0]]),bomb((0,0),45,55,empty,[],[[0,0]],textures),gun((0,0),80,60,empty,[],[[0,0]],100,"l",textures),damage((0,0),45,45,empty,[],[[0,0]])]
+for i in range(0,201):
     scoreuptohundred.append([scorefont.render(f"Green player Score: {i/2}",True,(255,255,255)),scorefont.render(f"Blue player Score: {i/2}",True,(255,255,255))])
 for i in range(0,201):
     roundsuptohundred.append(roundfont.render(f"Round: {i}",True,(255,255,255)))
+for i in range(0,100):
+    seconds.append(roundfont.render(f"{i}",True,(0,0,0)))
 listofclasses=[damage,gun,prozor,lbolts,Startend,bomb]
 lbombs=[]
 while True:
@@ -79,7 +83,7 @@ while True:
         count=0
         for i in range(len(lbolts)):
             for j in range(len(lpatforms)):
-                if lbolts[count].id!=lpatforms[j].id:
+                if lbolts[count].id!=lpatforms[j].pubid:
                     if pygame.Rect(lbolts[count].x,lbolts[count].y,lbolts[count].w,lbolts[count].h).colliderect(lpatforms[j].x,lpatforms[j].y,lpatforms[j].width,lpatforms[j].height):
                         del lbolts[count]
                         count-=1
@@ -101,8 +105,14 @@ while True:
         fordraw=player1.move(keys,lpatforms,player2,True,change)
         fordraw1=player2.move(keys,lpatforms,player1,True,change)
         
-        offerer=Offerer([Special((0,0),100,20,empty,[Platform((0,0),20,100)],[[0,0],[100,-100]]),Special((0,0),250,20,empty,[],[[0,0]]),bomb((0,0),45,55,empty,[],[[0,0]],textures),gun((0,0),80,60,empty,[],[[0,0]],100,"l",textures),damage((0,0),45,45,empty,[],[[0,0]])],225)
-        
+        selected=[]
+        for i in range(5):
+            indexrandom=random.randint(0,len(listofplatformsrandomselect)-1)
+            if type(listofplatformsrandomselect[indexrandom])==gun:
+                gun.pubid+=1
+                listofplatformsrandomselect[indexrandom].pubid=gun.pubid
+            selected.append(copy.deepcopy(listofplatformsrandomselect[indexrandom]))
+        offerer=Offerer(selected,HEIGHT//(1067/225))
         for i in range(len(lpatforms)):
             listofclasses=lpatforms[i].draw(window,listofclasses,textures)
             lbolts=listofclasses[3]
@@ -190,7 +200,7 @@ while True:
             if can:
                 lpatforms.extend(player2.building.listofplats2)
             else:
-                p1placed=False
+                p2placed=False
             if type(player2.building)==bomb and can:
                 lbombs.append(Placedbomb(player2.building.x+player2.building.width//2,
                                          player2.building.y+player2.building.height//2))
@@ -227,7 +237,7 @@ while True:
                                          player1.building.y+player1.building.height//2))
                 countj=0
                 for j in range((len(lpatforms))):
-                    if pygame.Rect(player1.building.x-WIDTH//(1707/135)//2,player1.building.y-HEIGHT//(1067/135)//2,WIDTH//(1707/135),HEIGHT//(1067/135)).colliderect(pygame.Rect(lpatforms[countj].x,lpatforms[countj].y,lpatforms[countj].width,lpatforms[countj].height)):
+                    if pygame.Rect(player1.building.x-WIDTH//(1707/135)//2+player1.building.width//2,player1.building.y-HEIGHT//(1067/135)//2+player1.building.height//2,WIDTH//(1707/135),HEIGHT//(1067/135)).colliderect(pygame.Rect(lpatforms[countj].x,lpatforms[countj].y,lpatforms[countj].width,lpatforms[countj].height)):
                         if type(lpatforms[countj])!=Startend:
                             del lpatforms[countj]
                             countj-=1
@@ -241,6 +251,9 @@ while True:
         if keys[pygame.K_PAGEDOWN] and not p2took:
             p2placed=True
             p2took=True
+        if countdown//fps<=5 and countdown>1:
+            window.blit(seconds[countdown//fps],(WIDTH//2-seconds[countdown//fps].get_width()//2,HEIGHT//2-seconds[countdown//fps].get_height()//2))
+            
     if countdown==0 and prozor!="game":
         prozor="game"
     if prozor=="menu":

@@ -23,7 +23,7 @@ class Bolt:
         self=None
 class Platform:
     def __init__(s,pos,width,height):
-        s.id=-1
+        s.pubid=-1
         s.x,s.y=pos
         s.width=width
         s.height=height
@@ -52,7 +52,7 @@ class Platform:
                     if s.dir=="r":
                         dy=0
                     s.time=100
-                    damage[3].append(Bolt(dx,dy,s.y+s.height//2,s.x+s.width//2,s.dir,textures,s.id))
+                    damage[3].append(Bolt(dx,dy,s.y+s.height//2,s.x+s.width//2,s.dir,textures,s.pubid))
             #pygame.draw.rect(window,(0,0,255),pygame.Rect(s.x,s.y,s.width,s.height))
         else:
             pygame.draw.rect(window,(255,255,100),pygame.Rect(s.x,s.y,s.width,s.height))
