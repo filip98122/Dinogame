@@ -32,6 +32,7 @@ class Player:
         s.score=0
         s.yrazdeljak=100
         s.xrazdeljak=100
+        s.channelfootstep1=None
     def operate_cursor(s,window,keys,txt):
         s.move_cursor(keys)
         s.draw_cursor(window,txt)
@@ -70,7 +71,7 @@ class Player:
         if keys[s.keybinds[3]]:
             y+=s.speed
         s.curse_u_r=(x,y)
-    def move(s,keys,lplatforms,contempuary,cantmove,change):
+    def move(s,keys,lplatforms,contempuary,cantmove,change,textures):
         s.dx=0
         ylimitu=-1
         ylimitd=WIDTH+1
@@ -145,7 +146,21 @@ class Player:
             if s.onground==True:
                 s.onground=False
                 s.offgrounddx=s.dx
-        
+        if (keys[s.keybinds[1]] or keys[s.keybinds[0]] or keys[s.keybinds[2]]) and s.onground and not cantmove and s.untill==-1:
+            if (s.channelfootstep1!=None or contempuary.channelfootstep1!=None):
+                allow=True
+                if s.channelfootstep1!=None:
+                    if s.channelfootstep1.get_busy():
+                        allow=False
+                if contempuary.channelfootstep1!=None:
+                    if contempuary.channelfootstep1.get_busy():
+                        allow=False
+                if allow:
+                    #s.channelfootstep1=textures[f"soundfootsteps1{s.color}"].play()
+                    s.channelfootstep1=textures[f"soundfootsteps1b"].play()
+            else:
+                #s.channelfootstep1=textures[f"soundfootsteps1{s.color}"].play()
+                s.channelfootstep1=textures[f"soundfootsteps1b"].play()
         if keys[s.keybinds[0]] and not cantmove and s.untill==-1:
             if not s.onground:
                 if s.offgrounddx!=-s.speed:

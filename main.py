@@ -1,5 +1,6 @@
 from loader import *
 from functions import *
+pygame.mixer.init()
 player1=Player((WIDTH//10,HEIGHT//2),3,0,True,[pygame.K_a,pygame.K_d,pygame.K_w,pygame.K_s],"z")
 player2=Player((50,HEIGHT//2),3,0,True,[pygame.K_LEFT,pygame.K_RIGHT,pygame.K_UP,pygame.K_DOWN],"b")
 lpatforms=[Platform((0,HEIGHT//2+1),WIDTH//7,HEIGHT//6),Platform(((WIDTH//7)*6,HEIGHT//2),WIDTH-(WIDTH//7)*6,HEIGHT//6)]
@@ -32,6 +33,8 @@ for i in range(0,100):
     seconds.append(roundfont.render(f"{i}",True,(0,0,0)))
 listofclasses=[damage,gun,prozor,lbolts,Startend,bomb]
 lbombs=[]
+channelfootstep1=None
+channelfootstep2=None
 while True:
     listofclasses[2]=prozor
     listofclasses[3]=lbolts
@@ -50,8 +53,8 @@ while True:
             fps=2           
         if keys[pygame.K_1]:
             fps=60          
-        fordraw ,sad1=player1.move(keys,lpatforms,player2,won,change)
-        fordraw1,sad2=player2.move(keys,lpatforms,player1,won2,change)
+        fordraw ,sad1=player1.move(keys,lpatforms,player2,won,change,textures)
+        fordraw1,sad2=player2.move(keys,lpatforms,player1,won2,change,textures)
         if sad1:
             won=True
         if sad2:
@@ -102,8 +105,8 @@ while True:
     if to_play:
         player1=Player((WIDTH//10,HEIGHT//2),3,0,True,[pygame.K_a,pygame.K_d,pygame.K_w,pygame.K_s],"z")
         player2=Player((50,HEIGHT//2),3,0,True,[pygame.K_LEFT,pygame.K_RIGHT,pygame.K_UP,pygame.K_DOWN],"b")
-        fordraw=player1.move(keys,lpatforms,player2,True,change)
-        fordraw1=player2.move(keys,lpatforms,player1,True,change)
+        fordraw=player1.move(keys,lpatforms,player2,True,change,textures)
+        fordraw1=player2.move(keys,lpatforms,player1,True,change,textures)
         
         selected=[]
         for i in range(5):
@@ -188,7 +191,7 @@ while True:
             if type(player2.building)!=bomb:
                 lpatforms.append(Platform((0,100),WIDTH//7,HEIGHT))
                 lpatforms.append(Platform((WIDTH//7*6,100),WIDTH//7,HEIGHT))
-            for i in range(len(lpatforms)):
+            for i in range(len(lpatforms)): 
                 for j in range(len(player2.building.listofplats2)):
                     if pygame.Rect(player2.building.listofplats2[j].x,player2.building.listofplats2[j].y,player2.building.listofplats2[j].width,player2.building.listofplats2[j].height).colliderect(pygame.Rect(lpatforms[i].x,lpatforms[i].y,lpatforms[i].width,lpatforms[i].height)):
                         can=False
