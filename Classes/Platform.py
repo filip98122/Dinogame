@@ -15,9 +15,10 @@ class Bolt:
         s.h=textures[f"bolt{s.dir}"].get_height()
         s.x-=s.w//2
         s.y-=s.h//2
-    def everything(s,window,textures):
-        s.x+=s.dx*s.speed
-        s.y+=s.dy*s.speed
+    def everything(s,window,textures,moveit):
+        if moveit:
+            s.x+=s.dx*s.speed
+            s.y+=s.dy*s.speed
         window.blit(textures[f"bolt{s.dir}"],(s.x,s.y))
     def end(self):
         self=None
@@ -74,7 +75,7 @@ class Platform:
             return [True,s.y,s.x+s.width,s.width,s.height,s]
         return [False,-1,-1,-1]
     def colidewithclicked(s,mousepos,mousestate):
-        if s.x+s.width>=mousepos[0]>=s.x and s.y+s.height>=mousepos[1]>=s.y and mousestate:
+        if pygame.Rect(s.x,s.y,s.width,s.height).colliderect(pygame.Rect(mousepos[0],mousepos[1],WIDTH//(128//1.5)//2,HEIGHT//(36//1.5)//2)) and mousestate:
             return True
         return False
     def ifplayeronleftsidefor(s,px,py,pwidth,pheight):

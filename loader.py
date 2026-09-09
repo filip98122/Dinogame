@@ -25,14 +25,14 @@ def load():
     textures["crossbowd"]=pygame.transform.rotate(textures["crossbowr"],-90)
     textures["crossbowl"]=pygame.transform.rotate(textures["crossbowd"],-90)
     textures["startplat"]=pygame.transform.scale(pygame.image.load("textures/platform.png"),(WIDTH//7,HEIGHT//9))
-    textures["frame"]=pygame.transform.scale(pygame.image.load("textures/frame.png"),(WIDTH//(1707/135),HEIGHT//(1067/135)))
-    textures["bomb"]=pygame.transform.scale(pygame.image.load("textures/bomb.png"),(WIDTH//(1707/45),HEIGHT//(1067/55)))
+    textures["frame"]=pygame.transform.scale(pygame.image.load("textures/frame.png"),(WIDTH//(currentwannabew/135),HEIGHT//(1070/135)))
+    textures["bomb"]=pygame.transform.scale(pygame.image.load("textures/bomb.png"),(WIDTH//(currentwannabew/45),HEIGHT//(1070/55)))
     textures["soundfootsteps1z"]=pygame.Sound("textures/footstep.wav")
     textures["soundfootsteps1b"]=pygame.Sound("textures/footstep.wav")
     textures["soundfootsteps1z"].set_volume(1.0)
     textures["soundfootsteps1b"].set_volume(1.0)
-    scalex=WIDTH//(1707/135)/listofexplosions[3][0]
-    scaley=HEIGHT//(1067/135)/listofexplosions[3][1]
+    scalex=WIDTH//(currentwannabew/135)/listofexplosions[3][0]
+    scaley=HEIGHT//(1070/135)/listofexplosions[3][1]
     for i in range(len(listofexplosions)):
         textures[f"explosion{i}"]=pygame.transform.scale(pygame.image.load(f"textures/explosion{i}.png"),(int(listofexplosions[i][0]*scalex),int(listofexplosions[i][1]*scaley)))
     return textures

@@ -24,7 +24,11 @@ change=0
 seconds=[]
 scorefont=pygame.font.Font("textures/Verve.ttf",55)
 scoreuptohundred=[]
-listofplatformsrandomselect=[Special((0,0),100,20,empty,[Platform((0,0),20,100)],[[0,0],[100,-100]]),Special((0,0),250,20,empty,[],[[0,0]]),bomb((0,0),45,55,empty,[],[[0,0]],textures),gun((0,0),80,60,empty,[],[[0,0]],100,"l",textures),damage((0,0),45,45,empty,[],[[0,0]])]
+listofplatformsrandomselect=[Special((0,0),100,20,empty,[Platform((0,0),20,100)],[[0,0],[100,-100]])
+                             ,Special((0,0),250,20,empty,[],[[0,0]]),
+                             bomb((0,0),45,55,empty,[],[[0,0]],textures),
+                             gun((0,0),80,60,empty,[],[[0,0]],100,"l",textures),
+                             damage((0,0),45,45,empty,[],[[0,0]])]
 for i in range(0,201):
     scoreuptohundred.append([scorefont.render(f"Green player Score: {i/2}",True,(255,255,255)),scorefont.render(f"Blue player Score: {i/2}",True,(255,255,255))])
 for i in range(0,201):
@@ -35,18 +39,40 @@ listofclasses=[damage,gun,prozor,lbolts,Startend,bomb]
 lbombs=[]
 channelfootstep1=None
 channelfootstep2=None
+holdingescape=False
+halftransparent=pygame.Surface((WIDTH,HEIGHT))
+halftransparent.set_alpha(200)
 while True:
     listofclasses[2]=prozor
     listofclasses[3]=lbolts
-    window.fill((0,23,255))
+    window.fill((0,0,0))
     bg.drawbg(window,prozor,textures)
     events=pygame.event.get()
     keys=pygame.key.get_pressed()
     mousePos=pygame.mouse.get_pos()
     mouseState=pygame.mouse.get_pressed()
-    if keys[pygame.K_ESCAPE]:
-        break           
-    if prozor=="game":      
+    if holdingescape==True:
+        if not keys[pygame.K_ESCAPE]:
+            holdingescape=False
+    if prozor=="pause":
+        if keys[pygame.K_ESCAPE] and not holdingescape:
+            prozor="menu"
+            holdingescape=True
+        halftransparent.fill((0,0,0))
+        bg.drawbg(window,prozor,textures)
+        player1.draw(window,nokeys,True,textures,playerpic,True)
+        player2.draw(window,nokeys,True,textures,playerpic,True)
+        for i in range(len(lpatforms)):
+            lpatforms[i].draw(window,listofclasses,textures)
+        for i in range(len(lbolts)):
+            lbolts[i].everything(window,textures,False)
+        for i in range(len(lbombs)):
+            lbombs[i].draw(window,textures,False)
+        window.blit(halftransparent,(0,0))
+    if prozor=="game":
+        if keys[pygame.K_ESCAPE] and not holdingescape:
+            prozor="pause"
+            holdingescape=True
         if keys[pygame.K_b]:
             breakpoint()    
         if keys[pygame.K_2]:
@@ -71,7 +97,7 @@ while True:
             to_play=True
         count=0
         for i in range(len(lbolts)):
-            lbolts[count].everything(window,textures)
+            lbolts[count].everything(window,textures,True)
             if pygame.Rect(lbolts[count].x,lbolts[count].y,lbolts[count].w,lbolts[count].h).colliderect(player1.x-player1.w//2,player1.y-player1.h//2,player1.w,player1.h) and player1.untill==-1:
                 player1.health-=1
                 player1.untill=180
@@ -102,6 +128,7 @@ while True:
         window.blit(roundsuptohundred[roundof],(WIDTH//2-roundsuptohundred[roundof].get_width()//2,HEIGHT-roundsuptohundred[roundof].get_height()))
         window.blit(scoreuptohundred[int(p1score*2)][0],(WIDTH//2-roundsuptohundred[roundof].get_width()//2-scoreuptohundred[int(p1score*2)][0].get_width()*1.1,HEIGHT-scoreuptohundred[int(p1score*2)][0].get_height()))
         window.blit(scoreuptohundred[int(p3score*2)][1],(WIDTH//2+roundsuptohundred[roundof].get_width()//2+scoreuptohundred[int(p3score*2)][1].get_width()*0.1,HEIGHT-scoreuptohundred[int(p3score*2)][1].get_height()))
+        
     if to_play:
         player1=Player((WIDTH//10,HEIGHT//2),3,0,True,[pygame.K_a,pygame.K_d,pygame.K_w,pygame.K_s],"z")
         player2=Player((50,HEIGHT//2),3,0,True,[pygame.K_LEFT,pygame.K_RIGHT,pygame.K_UP,pygame.K_DOWN],"b")
@@ -115,7 +142,7 @@ while True:
                 gun.pubid+=1
                 listofplatformsrandomselect[indexrandom].pubid=gun.pubid
             selected.append(copy.deepcopy(listofplatformsrandomselect[indexrandom]))
-        offerer=Offerer(selected,HEIGHT//(1067/225))
+        offerer=Offerer(selected,HEIGHT//(1070/225))
         for i in range(len(lpatforms)):
             listofclasses=lpatforms[i].draw(window,listofclasses,textures)
             lbolts=listofclasses[3]
@@ -140,6 +167,9 @@ while True:
         lbolts=[]
         listofclasses=[damage,gun,prozor,lbolts,Startend,bomb]
     if prozor=="taking":
+        if keys[pygame.K_ESCAPE] and not holdingescape:
+            prozor="menu"
+            holdingescape=True
         for i in range(len(lpatforms)):
             listofclasses=lpatforms[i].draw(window,listofclasses,textures)
             lbolts=listofclasses[3]
@@ -209,7 +239,7 @@ while True:
                                          player2.building.y+player2.building.height//2))
                 countj=0
                 for j in range((len(lpatforms))):
-                    if pygame.Rect(player2.building.x-WIDTH//(1707/135)//2+player2.building.width//2,player2.building.y-HEIGHT//(1067/135)//2+player2.building.height//2,WIDTH//(1707/135),HEIGHT//(1067/135)).colliderect(pygame.Rect(lpatforms[countj].x,lpatforms[countj].y,lpatforms[countj].width,lpatforms[countj].height)):
+                    if pygame.Rect(player2.building.x-WIDTH//(currentwannabew/135)//2+player2.building.width//2,player2.building.y-HEIGHT//(1070/135)//2+player2.building.height//2,WIDTH//(currentwannabew/135),HEIGHT//(1070/135)).colliderect(pygame.Rect(lpatforms[countj].x,lpatforms[countj].y,lpatforms[countj].width,lpatforms[countj].height)):
                         if type(lpatforms[countj])!=Startend:
                             del lpatforms[countj]
                             countj-=1
@@ -240,7 +270,7 @@ while True:
                                          player1.building.y+player1.building.height//2))
                 countj=0
                 for j in range((len(lpatforms))):
-                    if pygame.Rect(player1.building.x-WIDTH//(1707/135)//2+player1.building.width//2,player1.building.y-HEIGHT//(1067/135)//2+player1.building.height//2,WIDTH//(1707/135),HEIGHT//(1067/135)).colliderect(pygame.Rect(lpatforms[countj].x,lpatforms[countj].y,lpatforms[countj].width,lpatforms[countj].height)):
+                    if pygame.Rect(player1.building.x-WIDTH//(currentwannabew/135)//2+player1.building.width//2,player1.building.y-HEIGHT//(1070/135)//2+player1.building.height//2,WIDTH//(currentwannabew/135),HEIGHT//(1070/135)).colliderect(pygame.Rect(lpatforms[countj].x,lpatforms[countj].y,lpatforms[countj].width,lpatforms[countj].height)):
                         if type(lpatforms[countj])!=Startend:
                             del lpatforms[countj]
                             countj-=1
@@ -257,9 +287,11 @@ while True:
         if countdown//fps<=5 and countdown>1:
             window.blit(seconds[countdown//fps],(WIDTH//2-seconds[countdown//fps].get_width()//2,HEIGHT//2-seconds[countdown//fps].get_height()//2))
             
-    if countdown==0 and prozor!="game":
+    if countdown==0 and prozor!="game" and prozor=="taking":
         prozor="game"
     if prozor=="menu":
+        if keys[pygame.K_ESCAPE] and holdingescape==False:
+            break
         if pygame.mouse.get_visible()==False:
             pygame.mouse.set_visible(True)
         startbutton.draw(window,textures)
@@ -271,10 +303,12 @@ while True:
             pygame.mouse.set_visible(False)
     countbombs=0
     for i in range(len(lbombs)):
-        lbombs[countbombs].draw(window,textures)
+        lbombs[countbombs].draw(window,textures,True)
         if lbombs[countbombs].alive==False:
             del lbombs[countbombs]
             continue
         countbombs+=1
+    if keys[pygame.K_ESCAPE]:
+        holdingescape=True
     pygame.display.update()
     clock.tick(fps)

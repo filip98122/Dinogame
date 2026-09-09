@@ -81,7 +81,7 @@ class Background:
     def drawbg(s,window,prozor,textures):
         if prozor=="menu":
             window.blit(textures["dinogame"],(0,0))
-        if prozor=="game" or prozor=="taking":
+        if prozor=="game" or prozor=="taking" or prozor=="pause":
             window.blit(textures["game"],(0,0))
 bg=Background()
 def empty(self):
@@ -115,9 +115,10 @@ class Placedbomb:
         s.time=0
         s.endtime=35
         s.alive=True
-    def draw(s,window,textures):
+    def draw(s,window,textures,moveit):
         pic=textures[f"explosion{s.time//(s.endtime//7)}"]
         window.blit(pic,(s.x-pic.get_width()//2,s.y-pic.get_height()//2))
-        s.time+=1
-        if s.time==s.endtime:
-            s.alive=False
+        if moveit:
+            s.time+=1
+            if s.time==s.endtime:
+                s.alive=False
