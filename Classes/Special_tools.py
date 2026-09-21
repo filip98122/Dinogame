@@ -108,6 +108,11 @@ class bomb(Special):
     def do_special(s, args):
         args[0].blit(args[1]["frame"],(s.x-s.radiusx//2+s.width//2,s.y-s.radiusy//2+s.height//2))
         return []
+class blackhole(Special):
+    def __init__(s, pos, width, height, specialfunc, listofplatforms, lockedfor,eatradius,pullradius):
+        s.eatradius=eatradius
+        s.pullradius=pullradius
+        super().__init__(pos, width, height, specialfunc, listofplatforms, lockedfor)
 class Placedbomb:
     def __init__(s,x,y):
         s.x=x

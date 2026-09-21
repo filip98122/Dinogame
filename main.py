@@ -1,9 +1,13 @@
 from loader import *
-from functions import *
+from Classes.Player import *
 pygame.mixer.init()
 player1=Player((WIDTH//10,HEIGHT//2),3,0,True,[pygame.K_a,pygame.K_d,pygame.K_w,pygame.K_s],"z")
 player2=Player((50,HEIGHT//2),3,0,True,[pygame.K_LEFT,pygame.K_RIGHT,pygame.K_UP,pygame.K_DOWN],"b")
 lpatforms=[Platform((0,HEIGHT//2+1),WIDTH//7,HEIGHT//6),Platform(((WIDTH//7)*6,HEIGHT//2),WIDTH-(WIDTH//7)*6,HEIGHT//6)]
+#resumebutton=Button()
+
+
+
 clickedN=False
 roundof=0
 to_play=False
@@ -24,18 +28,23 @@ change=0
 seconds=[]
 scorefont=pygame.font.Font("textures/Verve.ttf",55)
 scoreuptohundred=[]
-listofplatformsrandomselect=[Special((0,0),100,20,empty,[Platform((0,0),20,100)],[[0,0],[100,-100]])
-                             ,Special((0,0),250,20,empty,[],[[0,0]]),
+listofplatformsrandomselect=[Special((0,0),100,20,empty,[Platform((0,0),20,100)],[[0,0],[100,-100]]),
+                             Special((0,0),250,20,empty,[],[[0,0]]),
                              bomb((0,0),45,55,empty,[],[[0,0]],textures),
                              gun((0,0),80,60,empty,[],[[0,0]],100,"l",textures),
-                             damage((0,0),45,45,empty,[],[[0,0]])]
+                             damage((0,0),45,45,empty,[],[[0,0]]),
+                             blackhole((0,0),WIDTH//(currentwannabew/85),HEIGHT//(currentwannabeh/85),empty,[],[[0,0]],WIDTH//(currentwannabew/20),WIDTH//(currentwannabew/175))
+                             
+                             
+                             ]
+
 for i in range(0,201):
     scoreuptohundred.append([scorefont.render(f"Green player Score: {i/2}",True,(255,255,255)),scorefont.render(f"Blue player Score: {i/2}",True,(255,255,255))])
 for i in range(0,201):
     roundsuptohundred.append(roundfont.render(f"Round: {i}",True,(255,255,255)))
 for i in range(0,100):
     seconds.append(roundfont.render(f"{i}",True,(0,0,0)))
-listofclasses=[damage,gun,prozor,lbolts,Startend,bomb]
+listofclasses=[damage,gun,prozor,lbolts,Startend,bomb,blackhole]
 lbombs=[]
 channelfootstep1=None
 channelfootstep2=None
@@ -69,6 +78,9 @@ while True:
         for i in range(len(lbombs)):
             lbombs[i].draw(window,textures,False)
         window.blit(halftransparent,(0,0))
+        window.blit(textures["pausemenu"],(WIDTH//2-textures["pausemenu"].get_width()//2,HEIGHT//2-textures["pausemenu"].get_height()//2))
+        
+        
     if prozor=="game":
         if keys[pygame.K_ESCAPE] and not holdingescape:
             prozor="pause"
@@ -142,7 +154,7 @@ while True:
                 gun.pubid+=1
                 listofplatformsrandomselect[indexrandom].pubid=gun.pubid
             selected.append(copy.deepcopy(listofplatformsrandomselect[indexrandom]))
-        offerer=Offerer(selected,HEIGHT//(1070/225))
+        offerer=Offerer(selected,HEIGHT//(currentwannabeh/225))
         for i in range(len(lpatforms)):
             listofclasses=lpatforms[i].draw(window,listofclasses,textures)
             lbolts=listofclasses[3]
@@ -165,7 +177,7 @@ while True:
         player1.building=None
         player2.building=None
         lbolts=[]
-        listofclasses=[damage,gun,prozor,lbolts,Startend,bomb]
+        listofclasses=[damage,gun,prozor,lbolts,Startend,bomb,blackhole]
     if prozor=="taking":
         if keys[pygame.K_ESCAPE] and not holdingescape:
             prozor="menu"
@@ -239,7 +251,7 @@ while True:
                                          player2.building.y+player2.building.height//2))
                 countj=0
                 for j in range((len(lpatforms))):
-                    if pygame.Rect(player2.building.x-WIDTH//(currentwannabew/135)//2+player2.building.width//2,player2.building.y-HEIGHT//(1070/135)//2+player2.building.height//2,WIDTH//(currentwannabew/135),HEIGHT//(1070/135)).colliderect(pygame.Rect(lpatforms[countj].x,lpatforms[countj].y,lpatforms[countj].width,lpatforms[countj].height)):
+                    if pygame.Rect(player2.building.x-WIDTH//(currentwannabew/135)//2+player2.building.width//2,player2.building.y-HEIGHT//(currentwannabeh/135)//2+player2.building.height//2,WIDTH//(currentwannabew/135),HEIGHT//(currentwannabeh/135)).colliderect(pygame.Rect(lpatforms[countj].x,lpatforms[countj].y,lpatforms[countj].width,lpatforms[countj].height)):
                         if type(lpatforms[countj])!=Startend:
                             del lpatforms[countj]
                             countj-=1
@@ -270,7 +282,7 @@ while True:
                                          player1.building.y+player1.building.height//2))
                 countj=0
                 for j in range((len(lpatforms))):
-                    if pygame.Rect(player1.building.x-WIDTH//(currentwannabew/135)//2+player1.building.width//2,player1.building.y-HEIGHT//(1070/135)//2+player1.building.height//2,WIDTH//(currentwannabew/135),HEIGHT//(1070/135)).colliderect(pygame.Rect(lpatforms[countj].x,lpatforms[countj].y,lpatforms[countj].width,lpatforms[countj].height)):
+                    if pygame.Rect(player1.building.x-WIDTH//(currentwannabew/135)//2+player1.building.width//2,player1.building.y-HEIGHT//(currentwannabeh/135)//2+player1.building.height//2,WIDTH//(currentwannabew/135),HEIGHT//(currentwannabeh/135)).colliderect(pygame.Rect(lpatforms[countj].x,lpatforms[countj].y,lpatforms[countj].width,lpatforms[countj].height)):
                         if type(lpatforms[countj])!=Startend:
                             del lpatforms[countj]
                             countj-=1

@@ -1,6 +1,7 @@
 import pygame
 import copy
 import random
+import math
 pygame.init()
 window=pygame.display.set_mode((0,0),pygame.FULLSCREEN)
 currentwannabeh=window.get_height()

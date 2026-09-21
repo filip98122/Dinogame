@@ -1,5 +1,4 @@
 from Classes.Special_tools import *
-
 playerpic={"walk":[5,25],"idle":[1,10],"jump":[1,10]}
 class Player:
     def __init__(s,stpos,health,time,dirr,keybinds,color):
@@ -33,6 +32,7 @@ class Player:
         s.yrazdeljak=100
         s.xrazdeljak=100
         s.channelfootstep1=None
+        s.blackholepullscalefactordivide=50
     def operate_cursor(s,window,keys,txt):
         s.move_cursor(keys)
         s.draw_cursor(window,txt)
@@ -83,11 +83,12 @@ class Player:
             lplatforms.append(Platform((contempuary.x-contempuary.w//2,contempuary.y-contempuary.h//2),contempuary.w,contempuary.h))
         verdict=[[False],[False],[False],[False]]
         for j in range(len(lplatforms)):
+            if type(lplatforms[j])==blackhole:
+                continue
             functi=[lplatforms[j].ifplayerontop,lplatforms[j].ifplayerbelow,lplatforms[j].ifplayeronleftsidefor,lplatforms[j].ifplayeronrightsidefor]
             if j==len(lplatforms)-1:
                 functi[2]=lplatforms[j].ifplayeronleftside
                 functi[3]=lplatforms[j].ifplayeronrightside
-            
             verdict[0]=functi[0](s.x-s.w//2,s.y-s.h//2,s.w,s.h)
             verdict[1]=functi[1](s.x-s.w//2,s.y-s.h//2,s.w,s.h)
             verdict[2]=functi[2](s.x-s.w//2,s.y-s.h//2,s.w,s.h)
@@ -161,43 +162,7 @@ class Player:
             else:
                 #s.channelfootstep1=textures[f"soundfootsteps1{s.color}"].play()
                 s.channelfootstep1=textures[f"soundfootsteps1b"].play()
-        if keys[s.keybinds[0]] and not cantmove and s.untill==-1:
-            if not s.onground:
-                if s.offgrounddx!=-s.speed:
-                    s.offgrounddx-=s.speed/s.offgroundneojumpmaxspeed
-                    s.offgrounddx=max(s.offgrounddx,-s.speed/s.offgroundneojumpmaxspeed)
-            else:
-                s.dx-=s.speed
-            s.dirr=False
-        
-        if keys[s.keybinds[1]] and not cantmove and s.untill==-1:
-            if not s.onground:
-                if s.offgrounddx!=s.speed:
-                    s.offgrounddx+=s.speed/s.offgroundneojumpmaxspeed
-                    s.offgrounddx=min(s.offgrounddx,s.speed/s.offgroundneojumpmaxspeed)
-            else:
-                s.dx+=s.speed
-            s.dirr=True
-        if pamti[1]!=0:
-            if pamti[1][1][1]+1+s.h//2==s.y:
-                s.dy=0
-        if s.onground:
-            s.dy=0
-        if s.dy==0:
-            s.ddy=s.ddyperma
-        if keys[s.keybinds[2]] and s.onground and pamti[0]!=0 and not cantmove and s.untill==-1:
-            if pamti[0][1][1]-1-s.h//2==s.y:
-                s.offgrounddx=s.dx
-                s.dy=-s.permady
-                s.onground=False
-        if not s.onground:
-            if pamti[2]!=0:
-                if pamti[2][1][2]-2-s.w//2==s.x:
-                    s.offgrounddx=0
-            if pamti[3]!=0:
-                if pamti[3][1][2]+1+s.w//2==s.x:
-                    s.offgrounddx=0
-            s.dx=s.offgrounddx
+
         if s.untill==-1:
             if pamti[0]!=0:
                 if pamti[0][1][1]-1-s.h//2==s.y:
@@ -224,6 +189,82 @@ class Player:
                         s.untill=180
                     
     
+        for i in range(len(lplatforms)):
+            if type(lplatforms[i])==blackhole:
+                verdict=circle_rect_collison((lplatforms[i].x+lplatforms[i].width//2,lplatforms[i].y+lplatforms[i].height//2),lplatforms[i].pullradius,pygame.Rect(s.x-s.w//2,s.y-s.h//2,s.w,s.h))
+                if verdict:
+                    
+                    dx=lplatforms[i].x+lplatforms[i].width//2 - s.x-s.w//2
+                    dy=lplatforms[i].y+lplatforms[i].height//2- s.y-s.h//2
+                    distance=math.sqrt(dx**2+dy**2)
+                    rawdx=dx/distance # bug if 0 FIXED
+                    rawdy=dy/distance
+                    actdx=max(1,int(rawdx*distance/(s.blackholepullscalefactordivide)),rawdx*distance/(s.blackholepullscalefactordivide))
+                    actdy=max(1,int(rawdy*distance/(s.blackholepullscalefactordivide)),rawdy*distance/(s.blackholepullscalefactordivide))
+                    if dx>0:s.dx+=actdx
+                    else:s.dx-=actdx
+                    if dy>0:s.dy+=actdy
+                    else:s.dy-=actdy
+        
+        if keys[s.keybinds[0]] and not cantmove and s.untill==-1:
+            if not s.onground:
+                if s.offgrounddx!=-s.speed:
+                    s.offgrounddx-=s.speed/s.offgroundneojumpmaxspeed
+                    s.offgrounddx=max(s.offgrounddx,-s.speed/s.offgroundneojumpmaxspeed)
+            else:
+                s.dx-=s.speed
+            s.dirr=False
+        
+        if keys[s.keybinds[1]] and not cantmove and s.untill==-1:
+            if not s.onground:
+                if s.offgrounddx!=s.speed:
+                    s.offgrounddx+=s.speed/s.offgroundneojumpmaxspeed
+                    s.offgrounddx=min(s.offgrounddx,s.speed/s.offgroundneojumpmaxspeed)
+            else:
+                s.dx+=s.speed
+            s.dirr=True
+        if pamti[1]!=0:
+            if pamti[1][1][1]+1+s.h//2==s.y:
+                s.dy=0
+                
+                
+                
+                
+        if s.onground:
+            s.dy=0
+        if s.dy==0:
+            s.ddy=s.ddyperma
+            
+            
+            
+            
+            
+        if keys[s.keybinds[2]] and s.onground and pamti[0]!=0 and not cantmove and s.untill==-1:
+            if pamti[0][1][1]-1-s.h//2==s.y:
+                s.offgrounddx=s.dx
+                s.dy=-s.permady
+                s.onground=False
+        if not s.onground:
+            if pamti[2]!=0:
+                if pamti[2][1][2]-2-s.w//2==s.x:
+                    s.offgrounddx=0
+            if pamti[3]!=0:
+                if pamti[3][1][2]+1+s.w//2==s.x:
+                    s.offgrounddx=0
+            s.dx=s.offgrounddx
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
         
         
         s.smalldx=s.dx/100
@@ -231,6 +272,8 @@ class Player:
             s.x+=s.smalldx
             save=copy.deepcopy(s.x)
             for i in range(len(lplatforms)):
+                if type(lplatforms[i])==blackhole:
+                    continue
                 if pygame.Rect(s.x-s.w//2,s.y-s.h//2,s.w,s.h).colliderect(pygame.Rect(lplatforms[i].x,lplatforms[i].y,lplatforms[i].width,lplatforms[i].height)):
                     s.x-=s.smalldx
                     break
@@ -243,6 +286,8 @@ class Player:
             s.y+=s.smalldy
             save=copy.deepcopy(s.y)
             for i in range(len(lplatforms)):
+                if type(lplatforms[i])==blackhole:
+                    continue
                 if pygame.Rect(s.x-s.w//2,s.y-s.h//2,s.w,s.h).colliderect(pygame.Rect(lplatforms[i].x,lplatforms[i].y,lplatforms[i].width,lplatforms[i].height)):
                     s.y-=s.smalldy
                     break
