@@ -33,7 +33,7 @@ listofplatformsrandomselect=[Special((0,0),100,20,empty,[Platform((0,0),20,100)]
                              bomb((0,0),45,55,empty,[],[[0,0]],textures),
                              gun((0,0),80,60,empty,[],[[0,0]],100,"l",textures),
                              damage((0,0),45,45,empty,[],[[0,0]]),
-                             blackhole((0,0),WIDTH//(currentwannabew/85),HEIGHT//(currentwannabeh/85),empty,[],[[0,0]],WIDTH//(currentwannabew/20),WIDTH//(currentwannabew/175))
+                             blackhole((0,0),WIDTH//(currentwannabew/85),HEIGHT//(currentwannabeh/85),empty,[],[[0,0]],WIDTH//(currentwannabew/15),WIDTH//(currentwannabew/175))
                              
                              
                              ]
@@ -133,6 +133,16 @@ while True:
         for i in range(len(lpatforms)):
             listofclasses=lpatforms[i].draw(window,listofclasses,textures)
             lbolts=listofclasses[3]
+        for i in range(len(lpatforms)):
+            if type(lpatforms[i])==blackhole:
+                if circle_rect_collison((lpatforms[i].x+lpatforms[i].width//2,lpatforms[i].y+lpatforms[i].height//2),lpatforms[i].eatradius,pygame.Rect(player1.x-player1.w//2,player1.y-player1.h//2,player1.w,player1.h)) and player1.untill==-1:
+                    player1.health-=1
+                    player1.untill=180
+        for i in range(len(lpatforms)):
+            if type(lpatforms[i])==blackhole:
+                if circle_rect_collison((lpatforms[i].x+lpatforms[i].width//2,lpatforms[i].y+lpatforms[i].height//2),lpatforms[i].eatradius,pygame.Rect(player2.x-player2.w//2,player2.y-player2.h//2,player2.w,player2.h)) and player2.untill==-1:
+                    player2.health-=1
+                    player2.untill=180
         player1.draw(window,keys,fordraw ,textures,playerpic,won)
         player2.draw(window,keys,fordraw1,textures,playerpic,won2)
         if player1.health==0 and player2.health==0:

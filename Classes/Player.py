@@ -188,12 +188,11 @@ class Player:
                         s.health-=1
                         s.untill=180
                     
-    
+        pulled=False
         for i in range(len(lplatforms)):
             if type(lplatforms[i])==blackhole:
                 verdict=circle_rect_collison((lplatforms[i].x+lplatforms[i].width//2,lplatforms[i].y+lplatforms[i].height//2),lplatforms[i].pullradius,pygame.Rect(s.x-s.w//2,s.y-s.h//2,s.w,s.h))
                 if verdict:
-                    
                     dx=lplatforms[i].x+lplatforms[i].width//2 - s.x-s.w//2
                     dy=lplatforms[i].y+lplatforms[i].height//2- s.y-s.h//2
                     distance=math.sqrt(dx**2+dy**2)
@@ -205,8 +204,8 @@ class Player:
                     else:s.dx-=actdx
                     if dy>0:s.dy+=actdy
                     else:s.dy-=actdy
-        
-        if keys[s.keybinds[0]] and not cantmove and s.untill==-1:
+                    pulled=True
+        if keys[s.keybinds[0]] and not cantmove and s.untill==-1 and not pulled:
             if not s.onground:
                 if s.offgrounddx!=-s.speed:
                     s.offgrounddx-=s.speed/s.offgroundneojumpmaxspeed
@@ -215,7 +214,7 @@ class Player:
                 s.dx-=s.speed
             s.dirr=False
         
-        if keys[s.keybinds[1]] and not cantmove and s.untill==-1:
+        if keys[s.keybinds[1]] and not cantmove and s.untill==-1 and not pulled:
             if not s.onground:
                 if s.offgrounddx!=s.speed:
                     s.offgrounddx+=s.speed/s.offgroundneojumpmaxspeed
@@ -251,7 +250,7 @@ class Player:
             if pamti[3]!=0:
                 if pamti[3][1][2]+1+s.w//2==s.x:
                     s.offgrounddx=0
-            s.dx=s.offgrounddx
+            s.dx+=s.offgrounddx
         
         
         
@@ -279,8 +278,10 @@ class Player:
                     break
             if s.x!=save:
                 break
-        if not s.onground:
+        if not s.onground and not pulled:
             s.dy+=s.ddy
+        if not s.onground and pulled:
+            s.dy+=s.ddyperma
         s.smalldy=s.dy/s.yrazdeljak
         for i in range(s.yrazdeljak):
             s.y+=s.smalldy
