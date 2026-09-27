@@ -1,4 +1,4 @@
-from Classes.Platform import *
+from Local_2_player.Classes.Platform import *
 class Special(Platform):
     def __init__(s,pos,width,height,specialfunc,listofplatforms,lockedfor):
         super().__init__(pos,width,height)

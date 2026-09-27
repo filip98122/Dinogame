@@ -1,4 +1,5 @@
-from Classes.Special_tools import *
+from Local_2_player.Classes.Special_tools import *
+
 playerpic={"walk":[5,25],"idle":[1,10],"jump":[1,10]}
 class Player:
     def __init__(s,stpos,health,time,dirr,keybinds,color):
@@ -229,7 +230,7 @@ class Player:
                 
                 
                 
-        if s.onground:
+        if s.onground and not pulled:
             s.dy=0
         if s.dy==0:
             s.ddy=s.ddyperma

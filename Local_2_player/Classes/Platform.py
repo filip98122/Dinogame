@@ -1,5 +1,4 @@
-from functions import *
-
+from Local_2_player.functions import *
 lbolts=[]
 prozor="menu"
 listofclasses=[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
@@ -35,9 +34,9 @@ class Platform:
         if type(s)==damage[0]:
             window.blit(textures["barbedwire"],(s.x,s.y))
         elif type(s)==damage[6]:
-            pygame.draw.circle(window,(255,0,0),(s.x+s.width//2,s.y+s.height//2),s.pullradius)
+            #pygame.draw.circle(window,(255,0,0),(s.x+s.width//2,s.y+s.height//2),s.pullradius)
             window.blit(textures["blackhole"],(s.x,s.y))
-            pygame.draw.circle(window,(0,255,0),(s.x+s.width//2,s.y+s.height//2),s.eatradius)
+            #pygame.draw.circle(window,(0,255,0),(s.x+s.width//2,s.y+s.height//2),s.eatradius)
         elif type(s)==damage[4]:
             window.blit(textures["startplat"],(s.x,s.y))
         elif type(s)==damage[5]:

@@ -1,4 +1,7 @@
-from General_info import *
+from Local_2_player.General_info import *
+
+
+
 listofpics=[["walk",5],["idle",1]]
 color="zb"
 listofexplosions=[[12,11],[30,29],[51,47],[59,51],[57,51],[55,50],[53,49]]

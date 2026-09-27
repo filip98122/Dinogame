@@ -1,17 +1,34 @@
-from loader import *
-from Classes.Player import *
-pygame.mixer.init()
+import socket
+import sys
+import os
+parent_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+sys.path.append(parent_dir)
+server=socket.socket(socket.AF_INET,socket.SOCK_STREAM)
+server.bind(("127.0.0.1",9999))
+server.listen(2)
+print("Waiting")
+import json
+client1,address=server.accept()
+client2,address2=server.accept()
+
+serverasclient2=socket.socket(socket.AF_INET,socket.SOCK_STREAM)
+serverasclient2.connect(("127.0.0.1",9997))
+
+serverasclient1=socket.socket(socket.AF_INET,socket.SOCK_STREAM)
+serverasclient1.connect(("127.0.0.1",9998))
+
+from Local_2_player.main import *
 player1=Player((WIDTH//10,HEIGHT//2),3,0,True,[pygame.K_a,pygame.K_d,pygame.K_w,pygame.K_s],"z")
 player2=Player((50,HEIGHT//2),3,0,True,[pygame.K_LEFT,pygame.K_RIGHT,pygame.K_UP,pygame.K_DOWN],"b")
 lpatforms=[Platform((0,HEIGHT//2+1),WIDTH//7,HEIGHT//6),Platform(((WIDTH//7)*6,HEIGHT//2),WIDTH-(WIDTH//7)*6,HEIGHT//6)]
 #resumebutton=Button()
 
 
-
+ 
 clickedN=False
 roundof=0
 to_play=False
-fps=65
+fps=60
 countdown=-1
 nokeys=[False]
 pygame.mouse.set_visible(True)
@@ -52,6 +69,22 @@ holdingescape=False
 halftransparent=pygame.Surface((WIDTH,HEIGHT))
 halftransparent.set_alpha(200)
 while True:
+    data=b""
+    data2=b""
+    try:
+        print("Server connected!")
+        chunk=client1.recv(4096)#4 kb
+        chunk2=client2.recv(4096)
+        if not chunk and not chunk2:
+            break
+        data+=chunk
+        data2+=chunk2
+        actualdatajson=data.decode("utf-8")
+        actualdata=json.loads(actualdatajson)
+        actualdatajson2=data2.decode("utf-8")
+        actualdata2=json.loads(actualdatajson2)
+    except:
+        pass
     listofclasses[2]=prozor
     listofclasses[3]=lbolts
     window.fill((0,0,0))
@@ -334,3 +367,5 @@ while True:
         holdingescape=True
     pygame.display.update()
     clock.tick(fps)
+    serverasclient2.sendall((json.dumps(window)).encode("utf-8"))
+    serverasclient1.sendall((json.dumps(window)).encode("utf-8"))

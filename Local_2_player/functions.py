@@ -1,4 +1,4 @@
-from General_info import *
+from Local_2_player.General_info import *
 def circle_rect_collison(circle_center, circle_radius,rect:pygame.Rect):
     closest_x = max(rect.left, min(circle_center[0], rect.right))
     closest_y = max(rect.top, min(circle_center[1], rect.bottom))
