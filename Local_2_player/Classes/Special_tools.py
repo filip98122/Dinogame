@@ -13,7 +13,7 @@ class Special(Platform):
         first=False
         second=False
         for i in range(len(s.listofplats2)):
-            lsitofclasses=s.listofplats2[i].draw(window,lsitofclasses,textures)
+            lsitofclasses=s.listofplats2[i].draw(window,lsitofclasses,textures,lsitofclasses[7])
             a=s.listofplats2[i].colidewithclicked(poses[0],mouse1)
             a1=s.listofplats2[i].colidewithclicked(poses[1],mouse2)
             if a:
@@ -120,9 +120,10 @@ class Placedbomb:
         s.time=0
         s.endtime=35
         s.alive=True
-    def draw(s,window,textures,moveit):
-        pic=textures[f"explosion{s.time//(s.endtime//7)}"]
-        window.blit(pic,(s.x-pic.get_width()//2,s.y-pic.get_height()//2))
+    def draw(s,window,textures,moveit,draw=True):
+        if draw:
+            pic=textures[f"explosion{s.time//(s.endtime//7)}"]
+            window.blit(pic,(s.x-pic.get_width()//2,s.y-pic.get_height()//2))
         if moveit:
             s.time+=1
             if s.time==s.endtime:

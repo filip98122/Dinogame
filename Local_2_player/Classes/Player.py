@@ -60,6 +60,22 @@ class Player:
             #pygame.draw.rect(window,(255,0,0),pygame.Rect(s.x-s.w//2,s.y-s.h//2,s.w,s.h))
     def draw_cursor(s,window,textures):
         window.blit(textures[f"cursor{s.color}"],s.curse_u_r)
+    def playsound(s,keys,contempuary,textures,cantmove):
+        if (keys[s.keybinds[1]] or keys[s.keybinds[0]] or keys[s.keybinds[2]]) and s.onground and not cantmove and s.untill==-1:
+            if (s.channelfootstep1!=None or contempuary.channelfootstep1!=None):
+                allow=True
+                if s.channelfootstep1!=None:
+                    if s.channelfootstep1.get_busy():
+                        allow=False
+                if contempuary.channelfootstep1!=None:
+                    if contempuary.channelfootstep1.get_busy():
+                        allow=False
+                if allow:
+                    #s.channelfootstep1=textures[f"soundfootsteps1{s.color}"].play()
+                    s.channelfootstep1=textures[f"soundfootsteps1b"].play()
+            else:
+                #s.channelfootstep1=textures[f"soundfootsteps1{s.color}"].play()
+                s.channelfootstep1=textures[f"soundfootsteps1b"].play()
     def move_cursor(s,keys):
         x=s.curse_u_r[0]
         y=s.curse_u_r[1]
@@ -148,21 +164,6 @@ class Player:
             if s.onground==True:
                 s.onground=False
                 s.offgrounddx=s.dx
-        if (keys[s.keybinds[1]] or keys[s.keybinds[0]] or keys[s.keybinds[2]]) and s.onground and not cantmove and s.untill==-1:
-            if (s.channelfootstep1!=None or contempuary.channelfootstep1!=None):
-                allow=True
-                if s.channelfootstep1!=None:
-                    if s.channelfootstep1.get_busy():
-                        allow=False
-                if contempuary.channelfootstep1!=None:
-                    if contempuary.channelfootstep1.get_busy():
-                        allow=False
-                if allow:
-                    #s.channelfootstep1=textures[f"soundfootsteps1{s.color}"].play()
-                    s.channelfootstep1=textures[f"soundfootsteps1b"].play()
-            else:
-                #s.channelfootstep1=textures[f"soundfootsteps1{s.color}"].play()
-                s.channelfootstep1=textures[f"soundfootsteps1b"].play()
 
         if s.untill==-1:
             if pamti[0]!=0:

@@ -40,8 +40,10 @@ listofplatformsrandomselect=[Special((0,0),100,20,empty,[Platform((0,0),20,100)]
                              bomb((0,0),45,55,empty,[],[[0,0]],textures),
                              gun((0,0),80,60,empty,[],[[0,0]],100,"l",textures),
                              damage((0,0),45,45,empty,[],[[0,0]]),
-                             blackhole((0,0),WIDTH//(currentwannabew/85),HEIGHT//(currentwannabeh/85),empty,[],[[0,0]],WIDTH//(currentwannabew/15),WIDTH//(currentwannabew/175))
-                             
+                             blackhole((0,0),WIDTH//(currentwannabew/85),HEIGHT//(currentwannabeh/85),empty,[],[[0,0]],WIDTH//(currentwannabew/15),WIDTH//(currentwannabew/175)),
+                             gun((0,0),80,60,empty,[],[[0,0]],100,"r",textures),
+                             gun((0,0),80,60,empty,[],[[0,0]],100,"d",textures),
+                             gun((0,0),80,60,empty,[],[[0,0]],100,"u",textures)
                              
                              ]
 
@@ -51,7 +53,7 @@ for i in range(0,201):
     roundsuptohundred.append(roundfont.render(f"Round: {i}",True,(255,255,255)))
 for i in range(0,100):
     seconds.append(roundfont.render(f"{i}",True,(0,0,0)))
-listofclasses=[damage,gun,prozor,lbolts,Startend,bomb,blackhole]
+listofclasses=[damage,gun,prozor,lbolts,Startend,bomb,blackhole,True]
 lbombs=[]
 channelfootstep1=None
 channelfootstep2=None
@@ -84,7 +86,8 @@ while run:
         for i in range(len(lpatforms)):
             lpatforms[i].draw(window,listofclasses,textures)
         for i in range(len(lbolts)):
-            lbolts[i].everything(window,textures,False)
+            lbolts[i].move(False)
+            lbolts[i].draw(window,textures)
         for i in range(len(lbombs)):
             lbombs[i].draw(window,textures,False)
         window.blit(halftransparent,(0,0))
@@ -102,7 +105,9 @@ while run:
         if keys[pygame.K_1]:
             fps=60          
         fordraw ,sad1=player1.move(keys,lpatforms,player2,won,change,textures)
+        player1.playsound(keys,player2,textures,won)
         fordraw1,sad2=player2.move(keys,lpatforms,player1,won2,change,textures)
+        player2.playsound(keys,player1,textures,won2)
         if sad1:
             won=True
         if sad2:
@@ -119,7 +124,8 @@ while run:
             to_play=True
         count=0
         for i in range(len(lbolts)):
-            lbolts[count].everything(window,textures,True)
+            lbolts[count].move(True)
+            lbolts[count].draw(window,textures)
             if pygame.Rect(lbolts[count].x,lbolts[count].y,lbolts[count].w,lbolts[count].h).colliderect(player1.x-player1.w//2,player1.y-player1.h//2,player1.w,player1.h) and player1.untill==-1:
                 player1.health-=1
                 player1.untill=180

@@ -15,10 +15,11 @@ class Bolt:
         s.h=textures[f"bolt{s.dir}"].get_height()
         s.x-=s.w//2
         s.y-=s.h//2
-    def everything(s,window,textures,moveit):
+    def move(s,moveit):
         if moveit:
             s.x+=s.dx*s.speed
-            s.y+=s.dy*s.speed
+            s.y-=s.dy*s.speed
+    def draw(s,window,textures):
         window.blit(textures[f"bolt{s.dir}"],(s.x,s.y))
     def end(self):
         self=None
@@ -29,20 +30,21 @@ class Platform:
         s.width=width
         s.height=height
         s.yalllow=5
-    def draw(s,window,damage,textures):
-        
-        if type(s)==damage[0]:
-            window.blit(textures["barbedwire"],(s.x,s.y))
-        elif type(s)==damage[6]:
-            #pygame.draw.circle(window,(255,0,0),(s.x+s.width//2,s.y+s.height//2),s.pullradius)
-            window.blit(textures["blackhole"],(s.x,s.y))
-            #pygame.draw.circle(window,(0,255,0),(s.x+s.width//2,s.y+s.height//2),s.eatradius)
-        elif type(s)==damage[4]:
-            window.blit(textures["startplat"],(s.x,s.y))
-        elif type(s)==damage[5]:
-            window.blit(textures["bomb"],(s.x,s.y))
-        elif type(s)==damage[1]:
-            window.blit(textures[f"crossbow{s.dir}"],(s.x,s.y))
+    def draw(s,window,damage,textures,draw=True):
+        if draw:
+            if type(s)==damage[0]:
+                window.blit(textures["barbedwire"],(s.x,s.y))
+            elif type(s)==damage[6]:
+                #pygame.draw.circle(window,(255,0,0),(s.x+s.width//2,s.y+s.height//2),s.pullradius)
+                window.blit(textures["blackhole"],(s.x,s.y))
+                #pygame.draw.circle(window,(0,255,0),(s.x+s.width//2,s.y+s.height//2),s.eatradius)
+            elif type(s)==damage[4]:
+                window.blit(textures["startplat"],(s.x,s.y))
+            elif type(s)==damage[5]:
+                window.blit(textures["bomb"],(s.x,s.y))
+        if type(s)==damage[1]:
+            if draw:
+                window.blit(textures[f"crossbow{s.dir}"],(s.x,s.y))
             if damage[2]=="game":
                 s.time=max(s.time-1,0)
                 if s.time==0:
@@ -61,7 +63,8 @@ class Platform:
                     damage[3].append(Bolt(dx,dy,s.y+s.height//2,s.x+s.width//2,s.dir,textures,s.pubid))
             #pygame.draw.rect(window,(0,0,255),pygame.Rect(s.x,s.y,s.width,s.height))
         else:
-            pygame.draw.rect(window,(255,255,100),pygame.Rect(s.x,s.y,s.width,s.height))
+            if draw:
+                pygame.draw.rect(window,(255,255,100),pygame.Rect(s.x,s.y,s.width,s.height))
         return damage
     def ifplayerontop(s,px,py,pwidth,pheight):
         if ((s.x<=px<=s.x+s.width) or (s.x<=px+pwidth<=s.x+s.width) or (px<=s.x<=px+pwidth)) and py+pheight<=s.y+s.yalllow:

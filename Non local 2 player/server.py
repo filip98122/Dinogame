@@ -18,56 +18,7 @@ serverasclient1=socket.socket(socket.AF_INET,socket.SOCK_STREAM)
 serverasclient1.connect(("127.0.0.1",9998))
 
 from Local_2_player.main import *
-player1=Player((WIDTH//10,HEIGHT//2),3,0,True,[pygame.K_a,pygame.K_d,pygame.K_w,pygame.K_s],"z")
-player2=Player((50,HEIGHT//2),3,0,True,[pygame.K_LEFT,pygame.K_RIGHT,pygame.K_UP,pygame.K_DOWN],"b")
-lpatforms=[Platform((0,HEIGHT//2+1),WIDTH//7,HEIGHT//6),Platform(((WIDTH//7)*6,HEIGHT//2),WIDTH-(WIDTH//7)*6,HEIGHT//6)]
-#resumebutton=Button()
-
-
- 
-clickedN=False
-roundof=0
-to_play=False
-fps=60
-countdown=-1
-nokeys=[False]
-pygame.mouse.set_visible(True)
-p1score=0
-p3score=0
-roundfont=pygame.font.Font("textures/Verve.ttf",60)
-roundsuptohundred=[]
-won=False
-won2=False
-did=False
-presetsof=[]
-did2=False
-change=0
-seconds=[]
-scorefont=pygame.font.Font("textures/Verve.ttf",55)
-scoreuptohundred=[]
-listofplatformsrandomselect=[Special((0,0),100,20,empty,[Platform((0,0),20,100)],[[0,0],[100,-100]]),
-                             Special((0,0),250,20,empty,[],[[0,0]]),
-                             bomb((0,0),45,55,empty,[],[[0,0]],textures),
-                             gun((0,0),80,60,empty,[],[[0,0]],100,"l",textures),
-                             damage((0,0),45,45,empty,[],[[0,0]]),
-                             blackhole((0,0),WIDTH//(currentwannabew/85),HEIGHT//(currentwannabeh/85),empty,[],[[0,0]],WIDTH//(currentwannabew/15),WIDTH//(currentwannabew/175))
-                             
-                             
-                             ]
-
-for i in range(0,201):
-    scoreuptohundred.append([scorefont.render(f"Green player Score: {i/2}",True,(255,255,255)),scorefont.render(f"Blue player Score: {i/2}",True,(255,255,255))])
-for i in range(0,201):
-    roundsuptohundred.append(roundfont.render(f"Round: {i}",True,(255,255,255)))
-for i in range(0,100):
-    seconds.append(roundfont.render(f"{i}",True,(0,0,0)))
-listofclasses=[damage,gun,prozor,lbolts,Startend,bomb,blackhole]
-lbombs=[]
-channelfootstep1=None
-channelfootstep2=None
-holdingescape=False
-halftransparent=pygame.Surface((WIDTH,HEIGHT))
-halftransparent.set_alpha(200)
+listofclasses=[damage,gun,prozor,lbolts,Startend,bomb,blackhole,False]
 while True:
     data=b""
     data2=b""
@@ -87,8 +38,6 @@ while True:
         pass
     listofclasses[2]=prozor
     listofclasses[3]=lbolts
-    window.fill((0,0,0))
-    bg.drawbg(window,prozor,textures)
     events=pygame.event.get()
     keys=pygame.key.get_pressed()
     mousePos=pygame.mouse.get_pos()
@@ -100,18 +49,7 @@ while True:
         if keys[pygame.K_ESCAPE] and not holdingescape:
             prozor="menu"
             holdingescape=True
-        halftransparent.fill((0,0,0))
-        bg.drawbg(window,prozor,textures)
-        player1.draw(window,nokeys,True,textures,playerpic,True)
-        player2.draw(window,nokeys,True,textures,playerpic,True)
-        for i in range(len(lpatforms)):
-            lpatforms[i].draw(window,listofclasses,textures)
-        for i in range(len(lbolts)):
-            lbolts[i].everything(window,textures,False)
-        for i in range(len(lbombs)):
-            lbombs[i].draw(window,textures,False)
-        window.blit(halftransparent,(0,0))
-        window.blit(textures["pausemenu"],(WIDTH//2-textures["pausemenu"].get_width()//2,HEIGHT//2-textures["pausemenu"].get_height()//2))
+
         
         
     if prozor=="game":
@@ -142,7 +80,7 @@ while True:
             to_play=True
         count=0
         for i in range(len(lbolts)):
-            lbolts[count].everything(window,textures,True)
+            lbolts[count].move(True)
             if pygame.Rect(lbolts[count].x,lbolts[count].y,lbolts[count].w,lbolts[count].h).colliderect(player1.x-player1.w//2,player1.y-player1.h//2,player1.w,player1.h) and player1.untill==-1:
                 player1.health-=1
                 player1.untill=180
@@ -164,7 +102,7 @@ while True:
                         break
             count+=1
         for i in range(len(lpatforms)):
-            listofclasses=lpatforms[i].draw(window,listofclasses,textures)
+            listofclasses=lpatforms[i].draw(window,listofclasses,textures,False)
             lbolts=listofclasses[3]
         for i in range(len(lpatforms)):
             if type(lpatforms[i])==blackhole:
@@ -176,13 +114,8 @@ while True:
                 if circle_rect_collison((lpatforms[i].x+lpatforms[i].width//2,lpatforms[i].y+lpatforms[i].height//2),lpatforms[i].eatradius,pygame.Rect(player2.x-player2.w//2,player2.y-player2.h//2,player2.w,player2.h)) and player2.untill==-1:
                     player2.health-=1
                     player2.untill=180
-        player1.draw(window,keys,fordraw ,textures,playerpic,won)
-        player2.draw(window,keys,fordraw1,textures,playerpic,won2)
         if player1.health==0 and player2.health==0:
             to_play=True
-        window.blit(roundsuptohundred[roundof],(WIDTH//2-roundsuptohundred[roundof].get_width()//2,HEIGHT-roundsuptohundred[roundof].get_height()))
-        window.blit(scoreuptohundred[int(p1score*2)][0],(WIDTH//2-roundsuptohundred[roundof].get_width()//2-scoreuptohundred[int(p1score*2)][0].get_width()*1.1,HEIGHT-scoreuptohundred[int(p1score*2)][0].get_height()))
-        window.blit(scoreuptohundred[int(p3score*2)][1],(WIDTH//2+roundsuptohundred[roundof].get_width()//2+scoreuptohundred[int(p3score*2)][1].get_width()*0.1,HEIGHT-scoreuptohundred[int(p3score*2)][1].get_height()))
         
     if to_play:
         player1=Player((WIDTH//10,HEIGHT//2),3,0,True,[pygame.K_a,pygame.K_d,pygame.K_w,pygame.K_s],"z")
@@ -199,10 +132,12 @@ while True:
             selected.append(copy.deepcopy(listofplatformsrandomselect[indexrandom]))
         offerer=Offerer(selected,HEIGHT//(currentwannabeh/225))
         for i in range(len(lpatforms)):
-            listofclasses=lpatforms[i].draw(window,listofclasses,textures)
+            listofclasses=lpatforms[i].draw(window,listofclasses,textures,False)
             lbolts=listofclasses[3]
-        player1.draw(window,keys,fordraw ,textures,playerpic,True)
-        player2.draw(window,keys,fordraw1,textures,playerpic,True)
+            
+            
+            
+            
         countdown=1500
         prozor="taking"
         player1.curse_u_r,player2.curse_u_r=(WIDTH//2,HEIGHT//2),(WIDTH//2,HEIGHT//2)
@@ -225,11 +160,6 @@ while True:
         if keys[pygame.K_ESCAPE] and not holdingescape:
             prozor="menu"
             holdingescape=True
-        for i in range(len(lpatforms)):
-            listofclasses=lpatforms[i].draw(window,listofclasses,textures)
-            lbolts=listofclasses[3]
-        player1.draw(window,nokeys,True,textures,playerpic,True)
-        player2.draw(window,nokeys,True,textures,playerpic,True)
         if not p1took or not p2took:
             offerer.draw(window)
         if not p1took:
@@ -241,20 +171,16 @@ while True:
         if p1took and not p1placed:
             player1.move_cursor(keys)
             player1.curse_u_r=(int(player1.curse_u_r[0]),int(player1.curse_u_r[1]))
-            if type(player1.building)==bomb:
-                a=player1.building.do_special([window,textures])
             for i in range(len(player1.building.listofplats2)):
-                listofclasses=player1.building.listofplats2[i].draw(window,listofclasses,textures)
+                listofclasses=player1.building.listofplats2[i].draw(window,listofclasses,textures,False)
                 lbolts=listofclasses[3]
                 player1.building.listofplats2[i].x=player1.curse_u_r[0]+player1.building.lockedmove[i][0]
                 player1.building.listofplats2[i].y=player1.curse_u_r[1]+player1.building.lockedmove[i][1]
         if p2took and not p2placed:
             player2.move_cursor(keys)
             player2.curse_u_r=(int(player2.curse_u_r[0]),int(player2.curse_u_r[1]))
-            if type(player2.building)==bomb:
-                a=player2.building.do_special([window,textures])
             for i in range(len(player2.building.listofplats2)):
-                listofclasses=player2.building.listofplats2[i].draw(window,listofclasses,textures)
+                listofclasses=player2.building.listofplats2[i].draw(window,listofclasses,textures,False)
                 lbolts=listofclasses[3]
                 player2.building.listofplats2[i].x=int(player2.curse_u_r[0])+int(player2.building.lockedmove[i][0])
                 player2.building.listofplats2[i].y=int(player2.curse_u_r[1])+int(player2.building.lockedmove[i][1])
@@ -339,9 +265,7 @@ while True:
         if keys[pygame.K_PAGEDOWN] and not p2took:
             p2placed=True
             p2took=True
-        if countdown//fps<=5 and countdown>1:
-            window.blit(seconds[countdown//fps],(WIDTH//2-seconds[countdown//fps].get_width()//2,HEIGHT//2-seconds[countdown//fps].get_height()//2))
-            
+   
     if countdown==0 and prozor!="game" and prozor=="taking":
         prozor="game"
     if prozor=="menu":
@@ -358,7 +282,7 @@ while True:
             pygame.mouse.set_visible(False)
     countbombs=0
     for i in range(len(lbombs)):
-        lbombs[countbombs].draw(window,textures,True)
+        lbombs[countbombs].draw(window,textures,True,False)
         if lbombs[countbombs].alive==False:
             del lbombs[countbombs]
             continue
@@ -367,5 +291,9 @@ while True:
         holdingescape=True
     pygame.display.update()
     clock.tick(fps)
-    serverasclient2.sendall((json.dumps(window)).encode("utf-8"))
-    serverasclient1.sendall((json.dumps(window)).encode("utf-8"))
+    
+    #NEED TO PARSE
+    #NEED TO PARSE
+    parsed=[]
+    serverasclient2.sendall((json.dumps(parsed)).encode("utf-8"))
+    serverasclient1.sendall((json.dumps(parsed)).encode("utf-8"))
