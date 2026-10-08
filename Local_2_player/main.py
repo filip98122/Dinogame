@@ -38,12 +38,12 @@ scoreuptohundred=[]
 listofplatformsrandomselect=[Special((0,0),100,20,empty,[Platform((0,0),20,100)],[[0,0],[100,-100]]),
                              Special((0,0),250,20,empty,[],[[0,0]]),
                              bomb((0,0),45,55,empty,[],[[0,0]],textures),
-                             gun((0,0),80,60,empty,[],[[0,0]],100,"l",textures),
                              damage((0,0),45,45,empty,[],[[0,0]]),
                              blackhole((0,0),WIDTH//(currentwannabew/85),HEIGHT//(currentwannabeh/85),empty,[],[[0,0]],WIDTH//(currentwannabew/15),WIDTH//(currentwannabew/175)),
+                             [gun((0,0),80,60,empty,[],[[0,0]],100,"l",textures),
                              gun((0,0),80,60,empty,[],[[0,0]],100,"r",textures),
                              gun((0,0),80,60,empty,[],[[0,0]],100,"d",textures),
-                             gun((0,0),80,60,empty,[],[[0,0]],100,"u",textures)
+                             gun((0,0),80,60,empty,[],[[0,0]],100,"u",textures)]
                              
                              ]
 
@@ -89,7 +89,7 @@ while run:
             lbolts[i].move(False)
             lbolts[i].draw(window,textures)
         for i in range(len(lbombs)):
-            lbombs[i].draw(window,textures,False)
+            lbombs[i].draw(window,textures)
         window.blit(halftransparent,(0,0))
         window.blit(textures["pausemenu"],(WIDTH//2-textures["pausemenu"].get_width()//2,HEIGHT//2-textures["pausemenu"].get_height()//2))
         
@@ -104,10 +104,10 @@ while run:
             fps=2           
         if keys[pygame.K_1]:
             fps=60          
-        fordraw ,sad1=player1.move(keys,lpatforms,player2,won,change,textures)
         player1.playsound(keys,player2,textures,won)
-        fordraw1,sad2=player2.move(keys,lpatforms,player1,won2,change,textures)
+        fordraw ,sad1=player1.move(keys,lpatforms,player2,won,change,textures)
         player2.playsound(keys,player1,textures,won2)
+        fordraw1,sad2=player2.move(keys,lpatforms,player1,won2,change,textures)
         if sad1:
             won=True
         if sad2:
@@ -126,12 +126,12 @@ while run:
         for i in range(len(lbolts)):
             lbolts[count].move(True)
             lbolts[count].draw(window,textures)
-            if pygame.Rect(lbolts[count].x,lbolts[count].y,lbolts[count].w,lbolts[count].h).colliderect(player1.x-player1.w//2,player1.y-player1.h//2,player1.w,player1.h) and player1.untill==-1:
+            if pygame.Rect(lbolts[count].x,lbolts[count].y,lbolts[count].w,lbolts[count].h).colliderect(player1.x-player1.w//2,player1.y-player1.h//2,player1.w,player1.h) and player1.untill==-1 and not won:
                 player1.health-=1
                 player1.untill=180
                 del lbolts[count]
                 continue
-            if pygame.Rect(lbolts[count].x,lbolts[count].y,lbolts[count].w,lbolts[count].h).colliderect(player2.x-player2.w//2,player2.y-player2.h//2,player2.w,player2.h) and player2.untill==-1:
+            if pygame.Rect(lbolts[count].x,lbolts[count].y,lbolts[count].w,lbolts[count].h).colliderect(player2.x-player2.w//2,player2.y-player2.h//2,player2.w,player2.h) and player2.untill==-1 and not won2:
                 player2.health-=1
                 player2.untill=180
                 del lbolts[count]
@@ -176,10 +176,13 @@ while run:
         selected=[]
         for i in range(5):
             indexrandom=random.randint(0,len(listofplatformsrandomselect)-1)
-            if type(listofplatformsrandomselect[indexrandom])==gun:
+            if indexrandom==5:
+                newindex=random.randint(0,3)
                 gun.pubid+=1
-                listofplatformsrandomselect[indexrandom].pubid=gun.pubid
-            selected.append(copy.deepcopy(listofplatformsrandomselect[indexrandom]))
+                listofplatformsrandomselect[indexrandom][newindex].pubid=gun.pubid
+                selected.append(copy.deepcopy(listofplatformsrandomselect[indexrandom][newindex]))
+            else:
+                selected.append(copy.deepcopy(listofplatformsrandomselect[indexrandom]))
         offerer=Offerer(selected,HEIGHT//(currentwannabeh/225))
         for i in range(len(lpatforms)):
             listofclasses=lpatforms[i].draw(window,listofclasses,textures)
@@ -203,7 +206,7 @@ while run:
         player1.building=None
         player2.building=None
         lbolts=[]
-        listofclasses=[damage,gun,prozor,lbolts,Startend,bomb,blackhole]
+        listofclasses=[damage,gun,prozor,lbolts,Startend,bomb,blackhole,True]
     if prozor=="taking":
         if keys[pygame.K_ESCAPE] and not holdingescape:
             prozor="menu"

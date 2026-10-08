@@ -81,12 +81,12 @@ while True:
         count=0
         for i in range(len(lbolts)):
             lbolts[count].move(True)
-            if pygame.Rect(lbolts[count].x,lbolts[count].y,lbolts[count].w,lbolts[count].h).colliderect(player1.x-player1.w//2,player1.y-player1.h//2,player1.w,player1.h) and player1.untill==-1:
+            if pygame.Rect(lbolts[count].x,lbolts[count].y,lbolts[count].w,lbolts[count].h).colliderect(player1.x-player1.w//2,player1.y-player1.h//2,player1.w,player1.h) and player1.untill==-1 and not won:
                 player1.health-=1
                 player1.untill=180
                 del lbolts[count]
                 continue
-            if pygame.Rect(lbolts[count].x,lbolts[count].y,lbolts[count].w,lbolts[count].h).colliderect(player2.x-player2.w//2,player2.y-player2.h//2,player2.w,player2.h) and player2.untill==-1:
+            if pygame.Rect(lbolts[count].x,lbolts[count].y,lbolts[count].w,lbolts[count].h).colliderect(player2.x-player2.w//2,player2.y-player2.h//2,player2.w,player2.h) and player2.untill==-1 and not won2:
                 player2.health-=1
                 player2.untill=180
                 del lbolts[count]
@@ -126,10 +126,13 @@ while True:
         selected=[]
         for i in range(5):
             indexrandom=random.randint(0,len(listofplatformsrandomselect)-1)
-            if type(listofplatformsrandomselect[indexrandom])==gun:
+            if indexrandom==5:
+                newindex=random.randint(0,3)
                 gun.pubid+=1
-                listofplatformsrandomselect[indexrandom].pubid=gun.pubid
-            selected.append(copy.deepcopy(listofplatformsrandomselect[indexrandom]))
+                listofplatformsrandomselect[indexrandom][newindex].pubid=gun.pubid
+                selected.append(copy.deepcopy(listofplatformsrandomselect[indexrandom][newindex]))
+            else:
+                selected.append(copy.deepcopy(listofplatformsrandomselect[indexrandom]))
         offerer=Offerer(selected,HEIGHT//(currentwannabeh/225))
         for i in range(len(lpatforms)):
             listofclasses=lpatforms[i].draw(window,listofclasses,textures,False)
